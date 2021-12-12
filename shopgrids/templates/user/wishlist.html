@@ -1,0 +1,300 @@
+{% extends 'user/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<!-- cart starts -->
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<div class="breadcrumbs">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 col-md-6 col-12">
+          <div class="breadcrumbs-content">
+            <h1 class="page-title">Cart</h1>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-12">
+          <ul class="breadcrumb-nav">
+            <li>
+              <a href="index.html"><i class="lni lni-home"></i> Home</a>
+            </li>
+            <li><a href="index.html">Shop</a></li>
+            <li>Cart</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="shopping-cart section">
+    <div class="container">
+      <div class="cart-list-head">
+        <div class="cart-list-title">
+          <div class="row d-flex justify-content-between">
+            <div class="col-lg-1 col-md-1 col-12"> </div>
+            <div class="col-lg-4 col-md-3 col-12">
+              <p>Product Name</p>
+            </div>
+
+            <div class="col-lg-2 col-md-2 col-12">
+                <p>Add to Cart</p>
+              </div>
+
+              <div class="col-lg-2 col-md-2 col-12">
+                <p>Remove</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cart-single-list" id="cart_list">
+          <!-- cart iteration started -->
+          {% if wishlist_items.0 is not None %}
+
+
+          {% for item in wishlist_items %}
+          <div class="row mt-3 mb-3 align-items-center d-flex justify-content-between">
+
+            <div class="col-lg-1 col-md-1 col-12">
+              <a href="product-details.html">
+                {% for product in products %}
+                {% if item.products_id.id == product.id %}
+                <img src="{{product.product_cover.url}}" alt="#"/>
+
+
+              </a>
+            </div >
+            <div class="col-lg-4 col-md-3 col-12">
+              <h5 class="product-name">
+                <a href="product-details.html">
+                  {{product.product_name}}</a
+                >
+
+              </h5>
+              <p class="product-des">
+                <span><em>Category:</em> {{product.sub_category.catergory_id}}</span>
+                <span><em>Sub Category:</em> {{product.sub_category.sub_category_name}}</span>
+              </p>
+
+            </div>
+
+            <div class="col-lg-2 col-md-2 col-12">
+
+                {% if product.stocks == 0 %}
+                <div class="button cart-button">
+                    <button class="btn btn-warning" disabled
+                    ><i class="lni lni-cart"></i>Out Of Stock</button>
+                  </div>
+                {% else %}
+
+                <div class="button cart-button">
+                    <button class="btn" id="add_cart" style="width: 100%" onclick="add_to_cart('{{product.id}}')">
+                      <i class="lni lni-cart"></i>
+                      Add to cart
+                    </button>
+                  </div>
+
+                {% endif %}
+
+
+              </div>
+            {% endif %}
+            {% endfor %}
+
+            
+            <div class="col-lg-2 col-md-2 col-12">
+                <button onclick="confirm_delete('{{item.id}}')" style="border: none;background: none;"> <i class="lni lni-trash-can"></i
+              ></button>
+            </div>
+          </div>
+          {% endfor %}
+
+
+
+          {% else %}
+          <div class="row align-items-center">
+            <div class="col-12 text-center">
+              <h1><img width="150px" src="https://cdn.shopify.com/app-store/listing_images/34ae0275ebf361b3f6135ce614b37b6e/icon/CMeP5cL0lu8CEAE=.png"></i></h1>
+              <h3><strong>Your Wishlist is Empty</strong></h3>
+
+
+            </div >
+
+
+
+          </div>
+
+
+          {% endif %}
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+      <!-- sweet alert -->
+      <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+  <script>
+
+
+
+
+
+// delete cart items
+
+function confirm_delete(item_id){
+
+  var data = {
+
+      'item_id' :item_id,
+      'csrf_token' : '{{csrf_token}}',
+
+  }
+  swal({
+    title: "Are you sure?",
+    text: "Once deleted, you will not be able to recover the deleted cart item!",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+  })
+  .then((willDelete) => {
+    if (willDelete) {
+
+
+      $.ajax({
+        url:"{% url 'delete_wishlist_item' %}",
+        type:"POST",
+        data: data,
+          dataType: "html",
+          success: function () {
+              $("#cart_list").load(location.href + " #cart_list");    
+              $("#wishlist_main_div_id").load(location.href + " #wishlist_main_div_id");    
+
+               
+       
+    
+          }
+    
+      });
+      $("#cart_main_div_id").load(location.href + " #cart_main_div_id");            
+
+      swal("Poof! Your cart item has been deleted!", {
+        icon: "success",
+      });
+    } else {
+      swal("Your cart item is safe!");
+    }
+  });
+
+
+}
+
+
+// Restricting the form if the cart is empty
+
+function checkCartEmpty(total){
+
+
+  if (total <= 0){
+
+    Swal.fire('The cart is empty')
+
+  return false;
+}
+
+else
+
+{
+
+  return true;
+
+}
+
+}
+
+
+
+  
+
+
+
+
+  
+
+
+
+  </script>
+  <script>
+    //   <!-- add to cart -->
+
+    function add_to_cart(product_id, user_id){
+
+      console.log(product_id)
+      console.log(user_id)
+      var data = {
+          'product_id': product_id,
+          'user_id' :user_id,
+          'csrf_token' : '{{csrf_token}}',
+      
+  
+      }
+      $.ajax({
+          url:"{% url 'add_cart' %}",
+          type:"POST",
+          data: data,
+          success: function(data){
+            if (data.status == 1){
+
+              Toastify({
+      
+                text: "Item already in cart",
+                duration: 3000,
+                style: {
+                    background: "linear-gradient(to right, #ff512f",
+                  }
+  
+                }).showToast();
+
+
+
+            }
+            else{
+
+              console.log('success')
+              Toastify({
+      
+                text: "Item added to cart",
+                duration: 3000,
+                style: {
+                    background: "linear-gradient(to right, #ff512f",
+                  }
+  
+                }).showToast();
+              
+                $("#cart_main_div_id").load(location.href + " #cart_main_div_id");   
+            }
+         
+
+            
+              
+          }          
+      })
+  
+  
+  }
+
+
+
+  </script>
+
+
+
+
+
+
+
+
+{% endblock %}

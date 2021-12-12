@@ -1,0 +1,210 @@
+{% extends 'admin/adminbase.html' %}
+
+
+{% block content %}
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<div class="main-content">
+
+    <div class="page-content">
+        <div class="container-fluid">
+                        <!-- start page title -->
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                        <h4 class="mb-sm-0 font-size-18">Add Banner</h4>
+
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a href="{% url 'banner_management' %}">Banner Management</a></li>
+                                <li class="breadcrumb-item active">Add Banner</li>
+                            </ol>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+                        <!-- end page title -->
+
+            <div class="row">
+                <div class="d-flex justify-content-center">
+
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header text-center">
+                                <h4 class="card-title">ADD</h4>
+                                <p class="card-title-desc">Fill the form <code>correctly</code>.</p>
+                            
+                            </div>
+                            {% include 'includes/alert.html' %}
+                            <div class="card-body">
+                                <form action="{% url 'add_banner' %}" method="POST" id="add_banner_id_id" enctype='multipart/form-data'> 
+                                    {% csrf_token %}
+
+                                    <div class="mb-4">
+                                        <label class="form-label" for="default-input">Image Name</label>
+                                        <input class="form-control" name="banner_image" type="file" id="banner_image_id" placeholder="Default input">
+                                        <span class="error_form" id="banner_image_error_message"></span>
+
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label" for="default-input">Product</label>
+                                        <select class="form-select" aria-label="Default select example" name="product_selected" id="product_select_id">
+                                          <option selected>Open this select menu</option>
+                                          {% for product in products %}
+                                          <option value="{{product.id}}" >{{product.product_name}}</option>
+                                          {% endfor %}
+                                        </select>
+
+
+                                    </div>
+
+                                    <div class="mb-4">
+                                      <label for="productdesc">Product Description</label>
+                                      <textarea  name = 'product_description' class="form-control" id="productdescription" rows="5"></textarea>
+                                      <span class="error_form" id="image_description_error_message"></span>
+
+                                    </div>
+
+                                    <div class="mb-4 text-center">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+
+                                    </div>
+
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+</div>
+
+<script>
+    $(function(){
+
+        $("#banner_image_error_message").hide();
+        $("#image_description_error_message")
+     
+     
+        var error_image = false;
+        var error_image_description = false;
+     
+     
+     
+     
+        $('#banner_image_id').focusout(function(){
+            check_image();
+         });
+         $('#productdescription').focusout(function(){
+           image_description_description();
+         });
+     
+     
+     
+         function check_image() {
+
+            alert('fuckkk')
+     
+            var formData = new FormData();
+            var file = document.getElementById("banner_image_id").files[0];
+            formData.append("Filedata", file);
+            
+            var t = file.type.split('/').pop().toLowerCase();
+     
+            if (file == ''){
+              $("#banner_image_error_message").html("This field can't be empty").css("color","#F90A0A");
+              $("#banner_image_error_message").show();
+              $("#banner_image_id").css("border-bottom","2px solid #F90A0A");
+     
+              error_image = true;
+     
+            }
+     
+           if (t != "jpeg" && t != "jpg" && t != "png" && t != "bmp" && t != "gif" ) {
+     
+              $("#banner_image_error_message").html("Invalid image format").css("color","#F90A0A");
+              $("#banner_image_error_message").show();
+              $("#banner_image_id").css("border-bottom","2px solid #F90A0A");
+     
+              error_image = true;
+     
+     
+            }
+     
+     
+     
+           else {
+               $("#banner_image_error_message").hide();
+               $("#banner_image_id").css("border-bottom","2px solid #34F458");
+     
+            }
+           }
+            
+            
+         
+         function image_description_description() {
+            var description = $("#productdescription").val();
+            alert(description)
+     
+          
+            if ( description.length == 0 || description.length < 10 || description == '') {
+     
+               $("#image_description_error_message").html("Should atleast contain 10 Characters").css("color","#F90A0A");
+               $("#image_description_error_message").show();
+               $("#productdescription").css("border-bottom","2px solid #F90A0A");
+               error_image_description = true;
+            } else {
+               $("#image_description_error_message").hide();
+               $("#productdescription").css("border-bottom","2px solid #34F458");
+     
+            }
+            
+            
+         }
+     
+         $('#add_banner_id_id').submit(function() {
+
+
+           error_image = false;
+           error_image_description = false;
+           alert(error_image)
+           alert(error_image_description)
+
+
+     
+           check_image();
+           image_description_description();
+           alert(error_image)
+           alert(error_image_description)
+     
+     
+            if (error_image == false && error_image_description == false ) {
+     
+               return true;
+     
+            } else {
+     
+             Swal.fire('Fill the fields correctly')
+     
+               return false;
+     
+            }
+     
+     
+         });
+     
+     })
+</script>
+
+
+
+
+            
+
+{% endblock %}

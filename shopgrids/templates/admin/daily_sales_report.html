@@ -1,0 +1,145 @@
+{% extends 'admin/adminbase.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                                    <h4 class="mb-sm-0 font-size-18">Sales Report</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Ecommerce</a></li>
+                                            <li class="breadcrumb-item active">Daily Sales Report`</li>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+        
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title">Daily Sales Report</h4>
+                                        <p class="card-title-desc">The Daily Sales Report 
+                                        </p>
+                                    </div>
+                                    <div class="card-body">
+                                        <form action="{% url 'daily_sales_report' %}" method="POST">
+                                            {% csrf_token %}
+                                        <div class="row mb-3">
+                                            <div class="col-4">
+                                                <label for="basicpill-address-input" class="form-label">From</label>
+                                                <input type="date" name = "date1" class="form-control" id="from_id">
+
+                                            </div>
+                                            
+                                            <div class="col-4">
+                                                <label for="basicpill-address-input" class="form-label">TO</label>
+                                                <input type="date" name = "date2" class="form-control" id="to_id">
+                                            </div>
+
+                                            <div class="col-3">
+                                                <label for="basicpill-address-input" class="form-label"></label><br>
+                                                <br>
+
+                                                <button type="submit"  class="btn btn-primary btn-rounded waves-effect waves-light">Search</button>
+                                            </div>
+
+                                        </div>
+                                        </form>
+
+
+                                        <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
+
+                                            <thead>
+                                            <tr>
+                                                <th>Index</th>
+                                                <th>Order ID</th>
+                                                <th>Payment Method</th>
+                                                <th>Grand Total</th>
+                                                <th>Delivery Address</th>
+                                                <th>Delivery Status</th>
+                                                <th>Payment Status</th>
+                                                <th>Ordered Date</th>
+
+                                            </tr>
+                                            </thead>
+        
+        
+                                            <tbody>
+                                            {% for order in orders %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <td>{{order.order_id}}</td>
+                                                <td>{{order.payment_method}}</td>
+                                                <td>₹ {{order.grand_total}}</td>
+                                                <td>{{order.delivered_address}}</td>
+                                                <td>{{order.delivery_status}}</td>
+                                                <td>{{order.payment_status}}</td>
+                                                <td>{{order.ordered_date}}</td>
+
+
+                                            </tr>
+                                            {% endfor %}
+                                        
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- end cardaa -->
+                            </div> <!-- end col -->
+                        </div> <!-- end row -->
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+
+<script>
+ /*      function daily_sales(user_id,prd_id){
+
+
+     var data = {
+      
+            'user_id' :user_id,
+            'prd_id': prd_id,
+            'csrf_token' : '{{csrf_token}}',
+      
+        }
+        $.ajax({
+            url:"{% url 'product_decrement' %}",
+            type:"POST",
+            data: data,
+            success: function(response,cart_sub_total){
+              var cart_subtotal = response.cart_sub_total
+      
+              document.getElementById('cart_total').innerHTML=cart_subtotal
+      
+              $("#cart_list").load(location.href + " #cart_list");
+              $("#cart_main_div_id").load(location.href + " #cart_main_div_id");            
+      
+                  
+                
+                
+            }
+        }) 
+        
+      }*/
+</script>
+
+
+{% endblock %}

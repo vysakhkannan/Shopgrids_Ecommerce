@@ -1,0 +1,158 @@
+{% extends 'admin/adminbase.html' %}
+
+{% block content %}
+
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                                    <h4 class="mb-sm-0 font-size-18">Offer Management</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Ecommerce</a></li>
+                                            <li class="breadcrumb-item active">Order Management</li>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row" id="order_div_id">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="d-flex justify-content-between">                                                
+                                            <div>
+                                                    <h4 class="card-title">Offer</h4>
+                                                    <p class="card-title-desc">List of all offer available <code></code></p>
+                                            </div>
+                                            <div>
+                                                <a href = "{% url 'add_offer' %}" type="button" class="btn btn-primary waves-effect waves-light w-sm">
+                                                    Add Offer
+                                                </a>
+                                                
+                                            </div>
+
+
+                                        </div>
+                                    
+                                    <div class="card-body">
+        
+                                        <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
+                                            <thead>
+                                            <tr>
+                                                <th>Index</th>
+                                                <th>Offer Name</th>
+                                                <th>Offer Percent</th>
+                                                <th>Expiry Date</th>
+                                                <th>Expiry Time</th>
+
+                                                <th>Offer Availability</th>
+                                                <!-- <th>Edit</th> -->
+                                                <th>Delete</th>
+
+                                            </tr>
+                                            </thead>
+        
+                                            {% for offer in offers %}
+
+                                            <tbody>
+                                            <tr>
+
+
+                                                <td>{{ forloop.counter }}</td>
+                                                <td>{{offer.offer_name}}</td>
+                                                <td>{{offer.offer_percent}}</td>
+                                                <td>{{offer.expiry_date}}</td>
+                                                <td>{{offer.expiry_time}}</td>
+                                                
+                                                {% if offer.offer_status == 'True' %}
+                                                            
+
+                                                    <td data-field="age"><button type="button" class="btn btn-outline-success waves-effect waves-light" disabled>Available</button>
+                                                    </td>
+                                                {% else %}
+
+                                                    <td data-field="age"><button type="button" class="btn btn-outline-danger waves-effect waves-light" disabled>Expired</button>
+                                                    </td>                                            
+
+
+                                                {% endif %}
+
+
+
+                                                <!-- <td><a href = "{% url 'edit_product' offer.id %}" onclick="return swal('Are you sure ?')" class="btn btn-outline-secondary btn-sm edit" title="Edit"><i class="fas fa-pencil-alt"></i></a></td> -->
+                                                <td><a onclick="delete_offer('{{offer.id}}')" class="btn btn-outline-secondary btn-sm trash" title="DELETE"><i class="fas fa-trash-alt"></i></a></td>
+
+                                            </tr>
+                                            </tbody>
+                                            {% endfor %}
+                                        </table>
+        
+                                    </div>
+                                </div>
+                            </div> <!-- end col -->
+                        </div> <!-- end row -->
+                    </div>
+                </div>
+            </div>
+
+
+<script>
+    function delete_offer(id){
+
+        var data = {
+      
+            'offer_id' :id,
+            'csrf_token' : '{{csrf_token}}',
+      
+        }
+        swal({
+          title: "Are you sure?",
+          text: "Once deleted, you will not be able to recover the deleted product!",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+      
+      
+            $.ajax({
+              url:"{% url 'delete_offer' %}",
+              type:"POST",
+              data: data,
+                dataType: "html",
+                success: function () {
+                    $("#order_div_id").load(location.href + " #order_div_id");            
+          
+                }
+          
+            });
+            
+            swal("Poof! Your offer has been deleted!", {
+              icon: "success",
+            });
+          } else {
+            swal("Your offer is safe!");
+          }
+        });
+      
+      
+      }
+</script>
+
+
+{% endblock %}

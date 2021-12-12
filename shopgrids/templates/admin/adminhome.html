@@ -1,0 +1,274 @@
+{% extends 'admin/adminbase.html' %}           
+{% load static %}
+{% block content %}
+            ==============================================================
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                                    <h4 class="mb-sm-0 font-size-18">Welcome !</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
+                                            <li class="breadcrumb-item active">Welcome !</li>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row">
+                            <div class="col-xl-3 col-md-6">
+                                <!-- card -->
+                                <div class="card card-h-100">
+                                    <!-- card body -->
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1">
+                                                <span class="text-muted mb-3 lh-1 d-block text-truncate">Total Sales</span>
+                                                
+                                                <h4 class="mb-3">
+                                                    ₹<span class="counter-value" data-target="{{total_sales}}">0</span>
+
+                                                </h4>
+                                                <div class="text-nowrap">
+                                                    <!-- <span class="badge bg-soft-success text-success">{{total_sales}}</span>
+                                                    <span class="ms-1 text-muted font-size-13">Since last minute</span> -->
+                                                </div>
+                                            </div>
+ 
+                                        </div>
+                                    </div><!-- end card body -->
+                                </div><!-- end card -->
+                            </div><!-- end col -->
+        
+                            <div class="col-xl-3 col-md-6">
+                                <!-- card -->
+                                <div class="card card-h-100">
+                                    <!-- card body -->
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1">
+                                                <span class="text-muted mb-3 lh-1 d-block text-truncate">Total Items</span>
+                                                <h4 class="mb-3">
+                                                    <span class="counter-value" data-target="{{order_item_count}}">0</span>
+                                                </h4>
+                                                <div class="text-nowrap">
+                                                    <!-- <span class="badge bg-soft-danger text-danger">-29 Trades</span>
+                                                    <span class="ms-1 text-muted font-size-13">Since last week</span> -->
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div><!-- end card body -->
+                                </div><!-- end card -->
+                            </div><!-- end col-->
+        
+                            <div class="col-xl-3 col-md-6">
+                                <!-- card -->
+                                <div class="card card-h-100">
+                                    <!-- card body -->
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1">
+                                                <span class="text-muted mb-3 lh-1 d-block text-truncate">Average Sales</span>
+                                                <h4 class="mb-3">
+                                                    ₹<span class="counter-value" data-target="{{average_sales}}">0</span>
+                                                </h4>
+                                                <div class="text-nowrap">
+                                                    <!-- <span class="badge bg-soft-success text-success">+ $2.8k</span>
+                                                    <span class="ms-1 text-muted font-size-13">Since last week</span> -->
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div><!-- end card body -->
+                                </div><!-- end card -->
+                            </div><!-- end col -->
+        
+                            <div class="col-xl-3 col-md-6">
+                                <!-- card -->
+                                <div class="card card-h-100">
+                                    <!-- card body -->
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1">
+                                                <span class="text-muted mb-3 lh-1 d-block text-truncate">Order Delivery</span>
+                                                <h4 class="mb-3">
+                                                    <span class="counter-value" data-target="{{delivered_item}}">0</span>
+                                                </h4>
+                                                <div class="text-nowrap">
+                                                    <!-- <span class="badge bg-soft-success text-success">+5.32%</span>
+                                                    <span class="ms-1 text-muted font-size-13">Since last week</span> -->
+                                                </div>
+                                            </div>
+     
+                                        </div>
+                                    </div><!-- end card body -->
+                                </div><!-- end card -->
+                            </div><!-- end col -->    
+                        </div><!-- end row-->
+
+                        <div class="row">
+                            <div class="col-xl-6">
+                                <!-- card -->
+                                <div class="card">
+                                    <!-- card body -->
+                                    <div class="card-body">
+                                        <div class="d-flex flex-wrap align-items-center mb-4">
+                                            <h5 class="card-title me-2">Graph Based on Payment method total</h5>
+                                            <div class="ms-auto">
+   
+                                            </div>
+                                        </div>
+
+                                        <div class="row align-items-center">
+                                            <div class="col-xl-12">
+                                                <div>
+                                                    
+                                                <canvas id="myChart" width="200" height="90"></canvas>
+                                                <script>
+                                                const ctx = document.getElementById('myChart').getContext('2d');
+                                                const myChart = new Chart(ctx, {
+                                                    type: 'doughnut',
+                                                    data: {
+                                                        labels: [ 'Cash on Delivery', 'Razor Pay', 'PayPal', 'Wallet Pay' ],
+                                                        datasets: [{
+                                                            label: '# of Votes',
+                                                            data: [{{cod_total}}, {{razor_total}}, {{paypal_total}}, {{wallet_total}} ],
+                                                            backgroundColor: [
+                                                                'rgba(255, 99, 132, 0.2)',
+                                                                'rgba(54, 162, 235, 0.2)',
+                                                                'rgba(255, 206, 86, 0.2)',
+                                                                'rgba(75, 192, 192, 0.2)',
+                                                                'rgba(255, 99, 132, 0.2)',
+                                                                'rgba(255, 159, 64, 0.2)'
+                                                            ],
+                                                            borderColor: [
+                                                                'rgba(255, 99, 132, 1)',
+                                                                'rgba(54, 162, 235, 1)',
+                                                                'rgba(255, 206, 86, 1)',
+                                                                'rgba(75, 192, 192, 1)',
+                                                                'rgba(153, 102, 255, 1)',
+                                                                'rgba(255, 159, 64, 1)'
+                                                            ],
+                                                            borderWidth: 1
+                                                        }]
+                                                    },
+                                                    options: {
+                                                        scales: {
+                                                            y: {
+                                                                beginAtZero: true
+                                                            }
+                                                        }
+                                                    }
+                                                });
+                                                </script>
+ 
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    <!-- end card -->
+                                </div>
+                                <!-- end col -->
+                            </div>
+                            <!-- end row-->
+                            <div class="col-xl-6">
+                                <!-- card -->
+                                <div class="card">
+                                    <!-- card body -->
+                                    <div class="card-body">
+                                        <div class="d-flex flex-wrap align-items-center mb-4">
+                                            <h5 class="card-title me-2">Graph Based on Category sales</h5>
+                                            <div class="ms-auto">
+   
+                                            </div>
+                                        </div>
+
+                                        <div class="row align-items-center">
+                                            <div class="col-xl-12">
+                                                <div>
+                                                    
+                                                    <canvas id="myChart23" width="200" height="90"></canvas>
+                                                    <script>
+                                                        const ct = document.getElementById('myChart23').getContext('2d');
+                                                        const myChart1 = new Chart(ct, {
+                                                            type: 'pie',
+                                                            data: {
+                                                                labels: [{% for key in category_dict %} '{{key}}', {% endfor %} ],
+                                                                datasets: [{
+                                                                    label: '# of Votes',
+                                                                    data: [{% for key in category_price %} '{{key}}', {% endfor %}],
+                                                                    backgroundColor: [
+                                                                        'rgba(255, 99, 132, 0.2)',
+                                                                        'rgba(54, 162, 235, 0.2)',
+                                                                        'rgba(255, 206, 86, 0.2)',
+                                                                        'rgba(75, 192, 192, 0.2)',
+                                                                        'rgba(153, 102, 255, 0.2)',
+                                                                        'rgba(255, 159, 64, 0.2)'
+                                                                    ],
+                                                                    borderColor: [
+                                                                        'rgba(255, 99, 132, 1)',
+                                                                        'rgba(54, 162, 235, 1)',
+                                                                        'rgba(255, 206, 86, 1)',
+                                                                        'rgba(75, 192, 192, 1)',
+                                                                        'rgba(153, 102, 255, 1)',
+                                                                        'rgba(255, 159, 64, 1)'
+                                                                    ],
+                                                                    borderWidth: 1
+                                                                }]
+                                                            },
+                                                            options: {
+                                                                scales: {
+                                                                    y: {
+                                                                        beginAtZero: true
+                                                                    }
+                                                                }
+                                                            }
+                                                        });
+                                                        </script>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    <!-- end card -->
+                                </div>
+                                <!-- end col -->
+                            </div>
+                            <!-- end row-->
+                            
+        
+                        </div>
+                        <!-- end row-->
+                        
+
+
+                    </div>
+                    <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        
+
+
+        {% endblock %}

@@ -1,0 +1,238 @@
+{% extends 'admin/adminbase.html' %}
+
+
+{% block content %}
+
+
+<div class="main-content">
+
+    <div class="page-content">
+        <div class="container-fluid">
+
+            <!-- start page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                        <h4 class="mb-sm-0 font-size-18">Orders</h4>
+
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Ecommerce</a></li>
+                                <li class="breadcrumb-item active">Orders</li>
+                            </ol>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- end page title -->
+
+            <div class="row" id="order_div_id">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row mb-2">
+                                <div class="col-sm-4">
+                                    <div class="search-box me-2 mb-2 d-inline-block">
+                                        <div class="position-relative">
+                                            <input type="text" class="form-control" placeholder="Search...">
+                                            <i class="bx bx-search-alt search-icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+
+                                </div><!-- end col-->
+                            </div>
+    
+                            <div class="table-responsive">
+                                <table class="table align-middle table-nowrap table-check">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width: 20px;" class="align-middle">
+                                                <div class="form-check font-size-16">
+                                                    <input class="form-check-input" type="checkbox" id="checkAll">
+                                                    <label class="form-check-label" for="checkAll"></label>
+                                                </div>
+                                            </th>
+                                            <th class="align-middle">Order ID</th>
+                                            <th class="align-middle">Username</th>
+                                            <th class="align-middle">Payment Method</th>
+                                            <th class="align-middle">Grand Total</th>
+                                            <th class="align-middle">Delivered Address</th>
+                                            <th class="align-middle">Change Status</th>
+                                            <th class="align-middle">Order Status</th>
+                                            <th class="align-middle">View Details</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for order in orders %}
+                                        <tr>
+                                            <td>
+                                                <div class="form-check font-size-16">
+                                                    <input class="form-check-input" type="checkbox" id="orderidcheck01">
+                                                    <label class="form-check-label" for="orderidcheck01"></label>
+                                                </div>
+                                            </td>
+
+                                            <td><a href="javascript: void(0);" class="text-body fw-bold">{{order.order_id}}</a> </td>
+
+                                            <td>{{order.user}}</td>
+
+
+
+                                            <td>
+                                                <span class="badge badge-pill badge-soft-success font-size-12">{{order.payment_method}}</span>
+                                            </td>
+
+                                            <td>
+                                                ₹ {{order.grand_total}}
+                                            </td>
+
+                                            <td>
+                                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{order.delivered_address}}">
+                                                    <button class="btn btn-primary" style="pointer-events: none;" type="button" >Delivery Address</button>
+                                                  </span>
+                                                
+                                            </td>
+^
+                                            <td>
+                                                {% if order.delivery_status == 'cancelled' %}
+                                                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"disabled>Change Status<i class="mdi mdi-chevron-down"></i></button>
+
+                                                {% elif order.delivery_status == 'delivered' %}
+                                                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"disabled>Change Status<i class="mdi mdi-chevron-down"></i></button>
+
+                                                {% else %}
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Change Status<i class="mdi mdi-chevron-down"></i></button>
+                                                    <div class="dropdown-menu">
+
+                                                        <a class="dropdown-item" onclick="change_status('{{order.id}}','pending')">Pending</a>
+                                                        <a class="dropdown-item" onclick="change_status('{{order.id}}','shipped')">Shipped</a>
+                                                        <a class="dropdown-item" onclick="change_status('{{order.id}}','cancelled')">Cancelled</a>
+                                                        <a class="dropdown-item" onclick="change_status('{{order.id}}','delivered')">Delivered</a>
+
+                                                    </div>
+                                                </div><!-- /btn-group -->
+                                                {% endif %}
+
+                                            </td>
+                                            <td>
+                                                {% if order.delivery_status == 'cancelled' %}
+
+                                                <!-- Button trigger modal -->
+                                               <button type="button" class="btn btn-outline-danger btn-rounded waves-effect waves-light" disabled>Cancelled</button>
+
+                                               {% elif order.delivery_status == 'delivered' %}
+
+                                               <button type="button" class="btn btn-success waves-effect waves-light">
+                                                <i class="bx bx-check-double font-size-16 align-middle me-2"></i> Delivered
+                                                </button>
+                                                 
+                                                {% else %}
+                                                <button type="button" class="btn btn-success waves-effect waves-light">
+                                                    <i class="bx bx-check-double font-size-16 align-middle me-2"></i> {{order.delivery_status}}
+                                                    </button>
+
+                                                {% endif %}
+                                                
+
+                                            </td>
+
+
+                                            <td>
+                                                <!-- Button trigger modal -->
+                                                <a href="{% url 'view_order' order.id %}"> <button type="submit" class="btn btn-primary btn-sm btn-rounded" data-bs-toggle="modal" data-bs-target=".orderdetailsModal">
+                                                    View Details
+                                                    </button>
+                                                </a>
+                                            </td>
+                                        </tr>
+
+                                        {% endfor %}
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                            <ul class="pagination pagination-rounded justify-content-end mb-2">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="javascript: void(0);" aria-label="Previous">
+                                        <i class="mdi mdi-chevron-left"></i>
+                                    </a>
+                                </li>
+                                <li class="page-item active"><a class="page-link" href="javascript: void(0);">1</a></li>
+                                <li class="page-item"><a class="page-link" href="javascript: void(0);">2</a></li>
+                                <li class="page-item"><a class="page-link" href="javascript: void(0);">3</a></li>
+                                <li class="page-item"><a class="page-link" href="javascript: void(0);">4</a></li>
+                                <li class="page-item"><a class="page-link" href="javascript: void(0);">5</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="javascript: void(0);" aria-label="Next">
+                                        <i class="mdi mdi-chevron-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end row -->
+            
+        </div> <!-- container-fluid -->
+    </div>
+    <!-- End Page-content -->
+
+    
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-6">
+                    <script>document.write(new Date().getFullYear())</script> © Dason.
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end d-none d-sm-block">
+                        Design & Develop by <a href="#!" class="text-decoration-underline">Themesbrand</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+<!-- end main content-->
+
+<script>
+
+    // Change order status
+
+    function change_status(id,status){
+
+        var data = {
+      
+            'status' :status,
+            'order_id' : id,
+            'csrf_token' : '{{csrf_token}}',
+      
+        }
+        $.ajax({
+            url:"{% url 'change_status' %}",
+            type:"POST",
+            data: data,
+            success: function(response){
+      
+      
+              $("#order_div_id").load(location.href + " #order_div_id");
+      
+                  
+                
+                
+            }
+        })
+        
+      }
+
+
+</script>
+
+
+{% endblock %}

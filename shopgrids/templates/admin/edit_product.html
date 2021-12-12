@@ -1,0 +1,647 @@
+{% extends 'admin/adminbase.html' %}
+
+{% load static %}
+
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'admin/css/cropper.css' %}">
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                                    <h4 class="mb-sm-0 font-size-18">Edit Product</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Product Management</a></li>
+                                            <li class="breadcrumb-item active">Edit Product</li>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title">Basic Information</h4>
+                                        <p class="card-title-desc">Fill all information below</p>
+                                    </div>
+                                    <div class="card-body">
+
+                                        <!-- form starts -->
+                                        <form action="{% url 'edit_product' product.id %}" method="POST" enctype='multipart/form-data' id="product_edit_form">
+                                            {% csrf_token %}
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label for="productname">Product Name</label>
+                                                        <input id="productname" name="product_name" value="{{product.product_name}}" type="text" class="form-control">
+                                                        <span class="error_form" id="product_name_error_message"></span>
+
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="mrp">Mrp</label>
+                                                        <input id="m_r_p" name="mrp" type="number" value = "{{product.mrp}}" class="form-control" onkeypress="return isNumber(event)"  oninput="javascript : if(this.value > this.maxLength) this.value = this.value.slice(0,this.maxLength)" maxlength="6">
+                                                        <span class="error_form" id="mrp_error_message"></span>
+
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="sales">Sales Price</label>
+                                                        <input id="product_salesprice" name="sales_price" value = "{{product.sale_price}}"type="number" class="form-control" onkeypress="return isNumber(event)"  oninput="javascript : if(this.value > this.maxLength) this.value = this.value.slice(0,this.maxLength)" maxlength="6">
+                                                        <span class="error_form" id="sale_price_error_message"></span>
+
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label for="stock">stock</label>
+                                                        <input id="product_stock" name="stock" type="number" value = "{{product.stocks}}" class="form-control" onkeypress="return isNumber(event)"  oninput="javascript : if(this.value > this.maxLength) this.value = this.value.slice(0,this.maxLength)" maxlength="6">
+                                                        <span class="error_form" id="stock_error_message"></span>
+
+                                                    </div>
+                                                </div>
+        
+                                                <div class="col-sm-6">
+                                                    <!-- <div class="mb-3">
+                                                        <label class="control-label">Category</label>
+                                                        <select  name ='category' class="form-control select2">
+                                                            <option selected value = "{{product.sub_category.catergory_id.id}}">{{product.sub_category.catergory_id}}</option>
+                                                            {% for cat in categories %}
+                                                            <option value="{{cat.id}}">{{cat.category_name}}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div> -->
+                                                    <div class="mb-3">
+                                                        <label class="control-label">Sub Category</label>
+        
+                                                        <select name = 'sub_category' class="select2 form-control select2-multiple" data-placeholder="Choose ...">
+                                                            <option selected value="{{product.sub_category.id}}">{{product.sub_category.sub_category_name}}</option>
+                                                            {% for sub in sub_categories %}
+                                                            <option value="{{sub.id}}">{{sub.sub_category_name}}</option>
+                                                            {% endfor %}
+                                                        </select>
+        
+                                                    </div>
+                                                    <!-- <div class="mb-3">
+                                                        <label class="control-label">Add Offer</label>
+                                                        <select  name ='offer_id' class="form-control select2">
+                                                            {% for offer in offers %}
+
+                                                                {% if offer.offer_name == product.offer_name %}
+
+                                                                   <option value="{{offer.id}}" selected>{{product.offer_name}}</option>
+
+                                                                {% endif %}
+
+                                                            {% endfor %}
+
+                                                            {% for offer in offers %}
+                                                            <option value="{{offer.id}}">{{offer.offer_name}}</option>
+                                                            {% endfor %}
+                
+                                                        </select>
+                
+                                                    </div> -->
+                                                    <div class="mb-3">
+                                                        <label for="productdesc">Product Description</label>
+                                                        <textarea name = 'product_description' class="form-control" id="productdesc" rows="5">{{product.description}}</textarea>
+                                                        <span class="error_form" id="description_error_message"></span>
+
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+    
+        
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4 class="card-title mb-0">Product Cover Image</h4>
+                                            </div>
+                                            <div class="card-body">
+                                                    <div class="fallback">
+                                                        <input class="form-control" accept="image/*" id="img00" name="product_cover"  type="file"  />
+                                                        <textarea name="pro_img" id="pro_img_id" style="display: none;"></textarea>
+
+                                                    </div>
+                                                
+                                                    <div class="dz-message needsclick">
+                                                            <img src="{{product.product_cover.url}}" id="imageview" style="height: auto;width: 100px;">
+
+
+                                                    </div>
+
+
+                                            </div>
+                                        </div> <!-- end card-->
+
+                                    </div>
+                                </div>
+
+
+                                <!-- image insert -->
+                                <div class="row">
+                                    {% for img in images %}
+                                    <div class="col-md-3">
+
+
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4 class="card-title mb-0">Product Images {{ forloop.counter }}</h4>
+                                            </div>
+                                            <div class="card-body">
+                                                    <div class="fallback">
+                                                        <input accept="image/*" class="form-control" name="product_cover{{ forloop.counter }}" id="img0{{ forloop.counter }}" type="file" multiple />
+                                                         <input type="hidden" value="{{img.id}}" name="single_image_id{{ forloop.counter }}" id="">
+
+                                                        <textarea name="pro_img{{ forloop.counter }}" id="pro_img{{ forloop.counter }}_id" style="display: none;"></textarea>
+
+                                                    </div>
+                                                
+                                                    <div class="dz-message needsclick">
+                                                        <div class="mb-3">
+                                                            <img src="{{img.image.url}}" id="imageview{{ forloop.counter }}" width="120" />
+                                                            
+                                                        </div>
+
+                                                    </div>
+                                            </div>
+                                        </div> <!-- end card-->
+                                    </div>
+                                    {% endfor %}
+                                    
+                                </div> 
+
+                                <div class="row">
+
+                                    <div class="card">
+                                        <div class="card-body">
+                
+                                        <div class="card">
+                                            <div class="card-body">
+        
+                                                <div class="d-flex flex-wrap gap-2">
+                                                    <button type="submit" class="btn btn-primary waves-effect waves-light">Save Changes</button>
+
+                                                </form>
+
+                                                <a href="{% url 'product_management' %}"><button type="submit" class="btn btn-secondary waves-effect waves-light">Cancel</button></a>
+                                                </div>
+                
+                                            </div>
+                                        </div>
+        
+                                    </div>
+                                </div>
+                                
+    
+
+                        </div>
+                        <!-- end row -->
+                        
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+                <!-- MODAL 1 -->
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Crop Image</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="result"></div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                </button>
+                                <button type="button" id="btnCrop" class="btn save btn-primary">Save changes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- MODAL 2 -->
+                <div class="modal fade" id="exampleModalCenter1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Crop Image</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="result1"></div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                </button>
+                                <button type="button" id="btnCrop1" class="btn save1 btn-primary">Save changes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                                <!-- MODAL 3 -->
+                <div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Crop Image</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="box-2">
+                                    <div style="max-width: 100%;" class="result2"></div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                </button>
+                                <button type="button" id="btnCrop2" class="btn save2 btn-primary">Save changes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- MODAL 4 -->
+                <div class="modal fade" id="exampleModalCenter3" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Crop Image</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="box-2">
+                                    <div style="width:10em;height: 100%" class="result3"></div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                </button>
+                                <button type="button" id="btnCrop3" class="btn save3 btn-primary">Save changes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- MODAL 4 -->
+                <div class="modal fade" id="exampleModalCenter4" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Crop Image</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="box-2">
+                                    <div style="width:10em;height: 100%" class="result4"></div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                </button>
+                                <button type="button" id="btnCrop4" class="btn save4 btn-primary">Save changes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+<script>
+    let result = document.querySelector('.result'),
+        save = document.querySelector('.save'),
+        cropped = document.querySelector('.imageview'),
+        upload = document.querySelector('#img00'),
+        cropper = '';
+
+    upload.addEventListener('change', (e) => {
+        var fileName = document.getElementById("img00").value;
+        var idxDot = fileName.lastIndexOf(".") + 1;
+        var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+        if (extFile == "jpg" || extFile == "jpeg" || extFile == "png") {
+            if (e.target.files.length) {
+                // start file reader
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    if (e.target.result) {
+                        // create new image
+                        $("#exampleModalCenter").modal("show");
+                        let img = document.createElement('img');
+                        img.id = 'image';
+                        img.src = e.target.result;
+                        // clean result before
+                        result.innerHTML = '';
+                        // append new image
+                        result.appendChild(img);
+                        // init cropper
+                        cropper = new Cropper(img, {
+                            aspectRatio: 3 / 4,
+                            viewMode: 2,
+                        });
+                    }
+                };
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        } else {
+            swal("this file type is not supported", {
+                icon: "error",
+            })
+            fileName = "";
+            console.log(fileName)
+        }
+    });
+
+    save.addEventListener('click', (e) => {
+        e.preventDefault();
+        // get result to data uri
+        let imgSrc = cropper.getCroppedCanvas({
+            width: 0,
+            height: 1000 // img disp value
+        }).toDataURL();
+        $("#exampleModalCenter").modal("hide");
+        imageview.src = imgSrc;
+        $('#pro_img_id').val(imgSrc)
+
+    });
+</script>
+
+<!-- image cropper for 2nd image -->
+<script>
+    let result1 = document.querySelector('.result1'),
+        save1 = document.querySelector('.save1'),
+        cropped1 = document.querySelector('.imageview1'),
+        upload1 = document.querySelector('#img01'),
+        cropper1 = '';
+
+    upload1.addEventListener('change', (e) => {
+        var fileName = document.getElementById("img01").value;
+        var idxDot = fileName.lastIndexOf(".") + 1;
+        var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+        if (extFile == "jpg" || extFile == "jpeg" || extFile == "png") {
+            if (e.target.files.length) {
+                // start file reader
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    if (e.target.result) {
+                        // create new image
+                        $("#exampleModalCenter1").modal("show");
+                        let img1 = document.createElement('img');
+                        img1.id = 'image1';
+                        img1.src = e.target.result;
+                        // clean result before
+                        result1.innerHTML = '';
+                        // append new image
+                        result1.appendChild(img1);
+                        // init cropper
+                        cropper1 = new Cropper(img1, {
+                            aspectRatio: 3 / 4,
+                            viewMode: 2,
+                        });
+                    }
+                };
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        } else {
+            swal("this file type is not supported", {
+                icon: "error",
+            })
+            fileName = "";
+            console.log(fileName)
+        }
+    });
+
+    save1.addEventListener('click', (e) => {
+        e.preventDefault();
+        // get result to data uri
+        let imgSrc1 = cropper1.getCroppedCanvas({
+            width: 0,
+            height: 1000 // img disp value
+        }).toDataURL();
+        $("#exampleModalCenter1").modal("hide");
+        imageview1.src = imgSrc1;
+        $('#pro_img1_id').val(imgSrc1)
+
+    });
+</script>
+
+
+<!-- image crop for image 3 -->
+
+<script>
+    let result2 = document.querySelector('.result2'),
+        save2 = document.querySelector('.save2'),
+        cropped2 = document.querySelector('.imageview2'),
+        upload2 = document.querySelector('#img02'),
+        cropper2 = '';
+
+    upload2.addEventListener('change', (e) => {
+        var fileName = document.getElementById("img02").value;
+        var idxDot = fileName.lastIndexOf(".") + 1;
+        var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+        if (extFile == "jpg" || extFile == "jpeg" || extFile == "png") {
+            if (e.target.files.length) {
+                // start file reader
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    if (e.target.result) {
+                        // create new image
+                        $("#exampleModalCenter2").modal("show");
+                        let img2 = document.createElement('img');
+                        img2.id = 'image2';
+                        img2.src = e.target.result;
+                        // clean result before
+                        result2.innerHTML = '';
+                        // append new image
+                        result2.appendChild(img2);
+                        // init cropper
+                        cropper2 = new Cropper(img2, {
+                            aspectRatio: 3 / 4,
+                            viewMode: 2,
+                        });
+                    }
+                };
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        } else {
+            swal("this file type is not supported", {
+                icon: "error",
+            })
+            fileName = "";
+            console.log(fileName)
+        }
+    });
+
+    save2.addEventListener('click', (e) => {
+        e.preventDefault();
+        // get result to data uri
+        let imgSrc2 = cropper2.getCroppedCanvas({
+            width: 800,
+            height: 500 // img disp value
+        }).toDataURL();
+        $("#exampleModalCenter2").modal("hide");
+        imageview2.src = imgSrc2;
+        $('#pro_img2_id').val(imgSrc2)
+    });
+</script>
+
+
+<!-- fouth image crop -->
+
+<script>
+    let result3 = document.querySelector('.result3'),
+        save3 = document.querySelector('.save3'),
+        cropped3 = document.querySelector('.imageview3'),
+        upload3 = document.querySelector('#img03'),
+        cropper3 = '';
+
+    upload3.addEventListener('change', (e) => {
+        var fileName = document.getElementById("img03").value;
+        var idxDot = fileName.lastIndexOf(".") + 1;
+        var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+        if (extFile == "jpg" || extFile == "jpeg" || extFile == "png") {
+            if (e.target.files.length) {
+                // start file reader
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    if (e.target.result) {
+                        // create new image
+                        $("#exampleModalCenter3").modal("show");
+                        let img3 = document.createElement('img');
+                        img3.id = 'image3';
+                        img3.src = e.target.result
+                            // clean result before
+                        result3.innerHTML = '';
+                        // append new image
+                        result3.appendChild(img3);
+                        // init cropper
+                        cropper3 = new Cropper(img3, {
+                            aspectRatio: 3 / 4,
+                            viewMode: 2,
+                        });
+                    }
+                };
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        } else {
+            swal("this file type is not supported", {
+                icon: "error",
+            })
+            fileName = "";
+            console.log(fileName)
+        }
+    });
+
+    save3.addEventListener('click', (e) => {
+        e.preventDefault();
+        // get result to data uri
+        let imgSrc3 = cropper3.getCroppedCanvas({
+            width: 800,
+            height: 500 // img disp value
+        }).toDataURL();
+        $("#exampleModalCenter3").modal("hide");
+        imageview3.src = imgSrc3;
+        $('#pro_img3_id').val(imgSrc3)
+    });
+</script>
+
+<!-- fifth image crop -->
+
+<script>
+    let result4 = document.querySelector('.result4'),
+        save4 = document.querySelector('.save4'),
+        cropped4 = document.querySelector('.imageview4'),
+        upload4 = document.querySelector('#img04'),
+        cropper4 = '';
+
+    upload4.addEventListener('change', (e) => {
+        var fileName = document.getElementById("img04").value;
+        var idxDot = fileName.lastIndexOf(".") + 1;
+        var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+        if (extFile == "jpg" || extFile == "jpeg" || extFile == "png") {
+            if (e.target.files.length) {
+                // start file reader
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    if (e.target.result) {
+                        // create new image
+                        $("#exampleModalCenter4").modal("show");
+                        let img4 = document.createElement('img');
+                        img4.id = 'image4';
+                        img4.src = e.target.result
+                            // clean result before
+                        result4.innerHTML = '';
+                        // append new image
+                        result4.appendChild(img4);
+                        // init cropper
+                        cropper4 = new Cropper(img4, {
+                            aspectRatio: 3 / 4,
+                            viewMode: 2,
+                        });
+                    }
+                };
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        } else {
+            swal("this file type is not supported", {
+                icon: "error",
+            })
+            fileName = "";
+            console.log(fileName)
+        }
+    });
+
+    save4.addEventListener('click', (e) => {
+        e.preventDefault();
+        // get result to data uri
+        let imgSrc4 = cropper4.getCroppedCanvas({
+            width: 800,
+            height: 500 // img disp value
+        }).toDataURL();
+        $("#exampleModalCenter4").modal("hide");
+        imageview4.src = imgSrc4;
+        $('#pro_img4_id').val(imgSrc4)
+    });
+</script>
+
+
+
+
+<!-- crop cdn -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+{% endblock %}

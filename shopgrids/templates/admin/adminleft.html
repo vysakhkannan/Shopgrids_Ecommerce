@@ -1,0 +1,68 @@
+{% load static %}
+<!-- ========== Left Sidebar Start ========== -->
+<div class="vertical-menu">
+
+    <div data-simplebar class="h-100">
+ 
+        <!--- Sidemenu -->
+        <div id="sidebar-menu">
+            <!-- Left Menu Start -->
+            <ul class="metismenu list-unstyled" id="side-menu">
+                <li class="menu-title" data-key="t-menu">Menu</li>
+
+                <li>
+                    <a href="{% url 'adminlogin' %}">
+                        <i data-feather="home"></i>
+                        <span class="badge rounded-pill bg-soft-success text-success float-end">9+</span>
+                        <span data-key="t-dashboard">Dashboard</span>
+                    </a>
+                </li>
+
+                <li class="menu-title" data-key="t-apps">Apps</li>
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow">
+                        <i data-feather="shopping-cart"></i>
+                        <span data-key="t-ecommerce">Ecommerce</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="{% url 'product_management' %}" key="t-products">Products Management</a></li>
+                        <li><a href="{% url 'getuser' %}" data-key="t-product-detail">User Management</a></li>
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow">
+                                <span data-key="t-email">Category Management</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="{% url 'category' %}" data-key="t-inbox">Category</a></li>
+                                <li><a href="{% url 'sub_category' %}" data-key="t-read-email">Sub-Category</a></li>
+                            </ul>
+                        </li>
+
+                        <li><a href="{% url 'order_management' %}" data-key="t-orders">Orders Management</a></li>
+                        <li><a href="{% url 'banner_management' %}" data-key="t-customers">Banner Management</a></li>
+
+                        <li><a href="{% url 'offer_management' %}" data-key="t-cart">Offer Management</a></li>
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow">
+                                <span data-key="t-email">Sales Report</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="{% url 'daily_sales_report' %}" data-key="t-inbox">Daily Sales Report</a></li>
+                                <li><a href="{% url 'weekly_sales_report' %}" data-key="t-read-email">Weekly Sales Report</a></li>
+                                <li><a href="{% url 'yearly_sales_report' %}" data-key="t-profile">Yearly Sales Report</a></li>
+
+                            </ul>
+                        </li> 
+                        <li><a href="{% url 'coupon_management' %}" data-key="t-customers">Coupon Management</a></li>
+
+                       
+                    </ul>
+                </li>
+
+            </ul>
+
+        </div>
+        <!-- Sidebar -->
+    </div>
+</div>
+<!-- Left Sidebar End -->

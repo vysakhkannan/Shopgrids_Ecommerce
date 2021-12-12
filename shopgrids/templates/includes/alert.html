@@ -1,0 +1,19 @@
+
+{% if messages %}
+    {% for message in messages %}
+    <div id="message" class ="container">
+        <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %} role= "alert">
+            <span arial-hidden="true"></span></button>
+            {% if message.level == DEFAULT_MESSAGE_LEVELS_ERROR %}Important: {% endif %}
+            {{ message }}
+
+        </div>
+
+    </div>
+    {% endfor %}
+
+{% endif %}
+
+
+
+    

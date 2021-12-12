@@ -1,0 +1,509 @@
+{% extends 'user/base.html' %}
+
+{% block content %}
+
+<div class="container">
+  <!-- <div class="row mt-5 mb-5">
+      <div class="col-12 text-center">
+          <h2>
+              My Account
+          </h2>
+      </div>
+
+  </div> -->
+  <div class="row">
+      <div class="col-3 mt-5 mb-5">
+
+          <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+              <button class="nav-link active" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="true">My Profile</button>
+              <button class="nav-link" id="v-pills-orders-tab" data-bs-toggle="pill" data-bs-target="#v-pills-orders" type="button" role="tab" aria-controls="v-pills-orders" aria-selected="false">My Orders</button>
+              <button class="nav-link" id="v-pills-change-tab" data-bs-toggle="pill" data-bs-target="#v-pills-change" type="button" role="tab" aria-controls="v-pills-change" aria-selected="false">Change Password</button>
+
+            </div>
+
+      </div>
+      <div class="col-9 mt-5 mb-5">
+          <div class="tab-content" id="v-pills-tabContent">
+
+              <!-- your account -->
+
+              <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+
+                  <h2 class="mt-1 mb-5">Your Account Details</h2>
+                  <form method="POST" action="{% url 'change_account_details' %}">
+                    {% csrf_token %}
+                    <div class="form-row">
+                      <div class="form-group col-md-9">
+                        <label for="inputEmail4">First Name</label>
+                        <input type="text" class="form-control" id="inputEmail4" name="first_name" value="{{current_user.first_name}}">
+                      </div>
+                      <div class="form-group col-md-9">
+                        <label for="inputPassword4">Last name</label>
+                        <input type="text" class="form-control" id="inputPassword4" name="last_name" value="{{current_user.last_name}}">
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-group col-md-9">
+                        <label for="inputEmail4">Email</label>
+                        <input type="email" class="form-control" id="inputEmail4" name="email" value="{{current_user.email}}" placeholder="Email">
+                      </div>
+                      <div class="form-group col-md-9">
+                        <label for="inputPassword4">Username</label>
+                        <input type="text" class="form-control" id="inputPassword4" name="username" value="{{current_user.username}}" placeholder="Password">
+                      </div>
+                    </div>
+                    <div class="form-group col-md-9">
+                      <label for="inputAddress">Phone Number</label>
+                      <input type="number" class="form-control" id="inputAddress" name="phone_number" value="{{current_user.phone_number}}" placeholder="1234 Main St">
+                    </div>
+                    <div class="form-group col-md-9 mt-5 mb-5">
+                      <button type="submit" class="btn btn-primary">Change Details</button>
+            
+                    </div>
+            
+                  </form>
+
+              </div>
+
+              <!-- account my order -->
+
+              <div class="tab-pane fade" id="v-pills-orders" role="tabpanel" aria-labelledby="v-pills-orders-tab">
+
+                  <h2 class="mt-1 mb-5">Orders</h2>
+                  
+
+                  {% if orders.0.order_id is None %}
+                  <h2>No Orders</h2>
+                  {% else %}
+                  <div class="container">
+                    <!-- <div class="row mt-5 mb-5">
+                        <div class="col-12 text-center">
+                            <h2>
+                                My Account
+                            </h2>
+                        </div>
+                
+                    </div> -->
+                    <div class="row">
+                        <div class="col-3 mt-5 mb-5">
+                
+                            <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                <button class="nav-link active" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="true">My Profile</button>
+                                <button class="nav-link" id="v-pills-orders-tab" data-bs-toggle="pill" data-bs-target="#v-pills-orders" type="button" role="tab" aria-controls="v-pills-orders" aria-selected="false">My Orders</button>
+                                <button class="nav-link" id="v-pills-addresses-tab" data-bs-toggle="pill" data-bs-target="#v-pills-addresses" type="button" role="tab" aria-controls="v-pills-addresses" aria-selected="false">Addresses</button>
+                                <button class="nav-link" id="v-pills-change-tab" data-bs-toggle="pill" data-bs-target="#v-pills-change" type="button" role="tab" aria-controls="v-pills-change" aria-selected="false">Change Password</button>
+                
+                              </div>
+                
+                        </div>
+                        <div class="col-9 mt-5 mb-5">
+                            <div class="tab-content" id="v-pills-tabContent">
+                
+                                <!-- your account -->
+                
+                                <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                
+                                    <h2 class="mt-1 mb-5">Your Account Details</h2>
+                                    <form method="POST" action="{% url 'change_account_details' %}">
+                                      {% csrf_token %}
+                                      <div class="form-row">
+                                        <div class="form-group col-md-9">
+                                          <label for="inputEmail4">First Name</label>
+                                          <input type="text" class="form-control" id="inputEmail4" name="first_name" value="{{current_user.first_name}}">
+                                        </div>
+                                        <div class="form-group col-md-9">
+                                          <label for="inputPassword4">Last name</label>
+                                          <input type="text" class="form-control" id="inputPassword4" name="last_name" value="{{current_user.last_name}}">
+                                        </div>
+                                      </div>
+                                      <div class="form-row">
+                                        <div class="form-group col-md-9">
+                                          <label for="inputEmail4">Email</label>
+                                          <input type="email" class="form-control" id="inputEmail4" name="email" value="{{current_user.email}}" placeholder="Email">
+                                        </div>
+                                        <div class="form-group col-md-9">
+                                          <label for="inputPassword4">Username</label>
+                                          <input type="text" class="form-control" id="inputPassword4" name="username" value="{{current_user.username}}" placeholder="Password">
+                                        </div>
+                                      </div>
+                                      <div class="form-group col-md-9">
+                                        <label for="inputAddress">Phone Number</label>
+                                        <input type="number" class="form-control" id="inputAddress" name="phone_number" value="{{current_user.phone_number}}" placeholder="1234 Main St">
+                                      </div>
+                                      <div class="form-group col-md-9 mt-5 mb-5">
+                                        <button type="submit" class="btn btn-primary">Change Details</button>
+                              
+                                      </div>
+                              
+                                    </form>
+                
+                                </div>
+                
+                                <!-- account my order -->
+                
+                                <div class="tab-pane fade" id="v-pills-orders" role="tabpanel" aria-labelledby="v-pills-orders-tab">
+                
+                                    <h2 class="mt-1 mb-5">Orders</h2>
+                
+                                    {% for order in orders %}
+                
+                                    <article class="card mt-5 mb-5">
+                                    <header class="card-header">
+                                      <strong class="d-inline-block mr-3">Order ID: {{order.order_id}}</strong>
+                                      <br>
+                                      <span>Order Status: {{order.delivery_status}}</span>
+                                    </header>
+                                    <div class="card-body">
+                                      <div class="row"> 
+                                        <div class="col-md-8">
+                                          <h6 class="text-muted">Delivery to</h6>
+                                          <p>{{order.delivered_address}} <br>  
+                                            
+                                           </p>
+                                        </div>
+                                        <div class="col-md-4">
+                                          <h6 class="text-muted">Payment Method :</h6>
+                              
+                              
+                              
+                                          <span class="text-success">
+                                            <i class="fab fa-lg fa-cc-visa"></i>
+                                              {{order.payment_method}}
+                                          </span>
+                                          <p><br>
+                                           <span class="b">Grand Total: ₹ {{order.grand_total}} </span>
+                                          </p>
+                                        </div>
+                                      </div> <!-- row.// -->
+                                    </div> <!-- card-body .// -->
+                                    <div class="table-responsive">
+                                    <table class="table table-hover">
+                                      {% for sub_order in sub_orders %}
+                              
+                                        {% for product in products %}
+                              
+                                          {% if sub_order.order.id == order.id %}
+                              
+                                            {% if product.id == sub_order.products_id.id %}
+                              
+                                            <tr>
+                                              <td width="65">
+                                                <img src="{{product.product_cover.url}}" class="img-xs border">
+                                              </td>
+                                              <td> 
+                                                <p class="title mb-0">{{product.product_name}} </p>
+                                                <var class="price text-muted">INR {{product.sale_price}}</var>
+                                              </td>
+                                              <td> Quantity : {{sub_order.quantity}} </td>
+                                              <td width="250"> <a href="{% url 'single_product_view' product.id %}" class="btn btn-outline-primary">Details</a></td>
+                                            </tr>
+                              
+                                            {% endif %}
+                              
+                                          {% endif %}
+                              
+                                        {% endfor %}
+                                        
+                                      {% endfor %}
+                              
+                              
+                                    </table>
+                                    <div class="d-flex justify-content-center mb-3">
+                                      {% if order.delivery_status == 'cancelled' %}
+                              
+                                        <button class="btn btn-outline-danger" disabled>Order Cancelled</button>
+                              
+                                      {% elif order.delivery_status == 'delivered' %}
+                              
+                                      <button class="btn btn-outline-success" disabled>Delivered</button>
+                              
+                                      {% else %}
+                              
+                                        <button onclick="cancel_order('{{order.id}}')" class="btn btn-outline-danger">Cancel order</button>
+                              
+                                      {% endif %}
+                              
+                                    </div>
+                                    </div> <!-- table-responsive .end// -->
+                                    </article> <!-- order-group.// --> 
+                                    {% endfor %}
+                
+                                </div>
+                
+                                <!-- my order ends -->
+                
+                                <!-- change password -->
+                
+                                <div class="tab-pane fade" id="v-pills-change" role="tabpanel" aria-labelledby="v-pills-change-tab">
+                   
+                                          <h3 class="text-center">Change password</h3>
+                                          
+                                          <!--Password must contain one lowercase letter, one number, and be at least 7 characters long.-->
+                                          
+                                            <form method="POST" action="{% url 'change_password' %}">
+                                              {% csrf_token %}
+                              
+                                              <div class="form-group">
+                                                <label for="exampleInputEmail1">Enter Old Password</label>
+                                                <input type="password" name="old_password" class="form-control form-control-sm">
+                                              </div>
+                                              <div class="form-group">
+                                                <label for="exampleInputEmail1">Your new password</label>
+                                                <input type="password" name="new_password" class="form-control form-control-sm">
+                                              </div>
+                                              <div class="form-group">
+                                                <label for="exampleInputEmail1">Repeat password</label>
+                                                <input type="password" name="repeat_password" class="form-control form-control-sm">
+                                              </div>
+                                              <button type="submit" class="btn btn-primary btn-block submit-btn">Confirm</button>
+                                            </form>
+                                          </div>
+                
+                                </div>
+                
+                                <!-- change password ends -->
+                
+                                <!-- adress startss -->
+                
+                
+                                <div class="tab-pane fade" id="v-pills-addresses" role="tabpanel" aria-labelledby="v-pills-addresses-tab">
+                                    <h2 class="mb-5">Your Addresses</h2>
+                                    <table class="table table-hover">
+                                        <thead>
+                                          <tr>
+                                            <th scope="col">First Name</th>
+                                            <th scope="col">Last Name</th>
+                                            <th scope="col">Address</th>
+                                            <th scope="col">Phone Number</th>
+                                            <th scope="col">Email</th>
+                                            <th scope="col">City</th>
+                                            <th scope="col">Post Code</th>
+                                            <th scope="col">Country</th>
+                                            <th scope="col">state</th>
+                                            <th scope="col">Edit</th>
+                                            <th scope="col">Delete</th>
+                            
+                            
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for user_address in user_addresses %}
+                                          <tr>
+                                            <td>{{user_address.first_name}}</td>
+                                            <td>{{user_address.last_name}}</td>
+                                            <td>{{user_address.address}}</td>
+                            
+                                            <td>{{user_address.phone_number}}</td>
+                                            <td>{{user_address.email}}</td>
+                            
+                                            <td>{{user_address.city}}</td>
+                                            <td>{{user_address.post_code}}</td>
+                                            <td>{{user_address.country}}</td>
+                                            <td>{{user_address.state}}</td>
+                                            <td><a href="{% url 'my_account_address_edit' user_address.id %}"><button type="button" class="btn btn-outline-primary">EDIT</button></a></td>
+                                            <td><button onclick="delete_order('{{user_address.id}}')" type="button" class="btn btn-outline-danger">DELETE</button></td>
+                            
+                                          </tr>
+                                          {% endfor %}
+                                      </table>
+                
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                 
+                </div>
+                
+                <!-- sweet alert -->
+                
+                <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+                
+                
+                <script>
+                
+                    /* cancel order */
+                
+                    function delete_order(id){
+                
+                      var data = {
+                    
+                          'address_id' :id,
+                          'csrf_token' : '{{csrf_token}}',
+                    
+                      }
+                      swal({
+                        title: "Are you sure?",
+                        text: "Once Deleted, you will not be able to retrive the address!",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                      })
+                      .then((willDelete) => {
+                        if (willDelete) {
+                    
+                    
+                          $.ajax({
+                            url:"{% url 'delete_address' %}",
+                            type:"POST",
+                            data: data,
+                              dataType: "html",
+                              success: function () {
+                                  $("#ordered_items").load(location.href + " #ordered_items");            
+                        
+                              }
+                        
+                          });
+                          
+                          swal("You deleted your address!", {
+                            icon: "success",
+                          });
+                        } else {
+                          swal("Your address is safe!");
+                        }
+                      });
+                    
+                    
+                    }
+                    </script>
+                  {% endif %}
+
+              </div>
+
+              <!-- my order ends -->
+
+              <!-- change password -->
+
+              <div class="tab-pane fade" id="v-pills-change" role="tabpanel" aria-labelledby="v-pills-change-tab">
+ 
+                        <h3 class="text-center">Change password</h3>
+                        
+                        <!--Password must contain one lowercase letter, one number, and be at least 7 characters long.-->
+                        
+                          <form method="POST" action="{% url 'change_password' %}">
+                            {% csrf_token %}
+            
+                            <div class="form-group">
+                              <label for="exampleInputEmail1">Enter Old Password</label>
+                              <input type="password" name="old_password" class="form-control form-control-sm">
+                            </div>
+                            <div class="form-group">
+                              <label for="exampleInputEmail1">Your new password</label>
+                              <input type="password" name="new_password" class="form-control form-control-sm">
+                            </div>
+                            <div class="form-group">
+                              <label for="exampleInputEmail1">Repeat password</label>
+                              <input type="password" name="repeat_password" class="form-control form-control-sm">
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block submit-btn">Confirm</button>
+                          </form>
+                        </div>
+
+              </div>
+
+              <!-- change password ends -->
+
+              <!-- adress startss -->
+
+
+              <div class="tab-pane fade" id="v-pills-addresses" role="tabpanel" aria-labelledby="v-pills-addresses-tab">
+                  <h2 class="mb-5">Your Addresses</h2>
+                  <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th scope="col">First Name</th>
+                          <th scope="col">Last Name</th>
+                          <th scope="col">Address</th>
+                          <th scope="col">Phone Number</th>
+                          <th scope="col">Email</th>
+                          <th scope="col">City</th>
+                          <th scope="col">Post Code</th>
+                          <th scope="col">Country</th>
+                          <th scope="col">state</th>
+                          <th scope="col">Edit</th>
+                          <th scope="col">Delete</th>
+          
+          
+                        </tr>
+                      </thead>
+                      <tbody>
+                          {% for user_address in user_addresses %}
+                        <tr>
+                          <td>{{user_address.first_name}}</td>
+                          <td>{{user_address.last_name}}</td>
+                          <td>{{user_address.address}}</td>
+          
+                          <td>{{user_address.phone_number}}</td>
+                          <td>{{user_address.email}}</td>
+          
+                          <td>{{user_address.city}}</td>
+                          <td>{{user_address.post_code}}</td>
+                          <td>{{user_address.country}}</td>
+                          <td>{{user_address.state}}</td>
+                          <td><a href="{% url 'my_account_address_edit' user_address.id %}"><button type="button" class="btn btn-outline-primary">EDIT</button></a></td>
+                          <td><button onclick="delete_order('{{user_address.id}}')" type="button" class="btn btn-outline-danger">DELETE</button></td>
+          
+                        </tr>
+                        {% endfor %}
+                    </table>
+
+              </div>
+          </div>
+      </div>
+  </div>
+
+</div>
+
+<!-- sweet alert -->
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+<script>
+
+  /* cancel order */
+
+  function delete_order(id){
+
+    var data = {
+  
+        'address_id' :id,
+        'csrf_token' : '{{csrf_token}}',
+  
+    }
+    swal({
+      title: "Are you sure?",
+      text: "Once Deleted, you will not be able to retrive the address!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+  
+  
+        $.ajax({
+          url:"{% url 'delete_address' %}",
+          type:"POST",
+          data: data,
+            dataType: "html",
+            success: function () {
+                $("#ordered_items").load(location.href + " #ordered_items");            
+      
+            }
+      
+        });
+        
+        swal("You deleted your address!", {
+          icon: "success",
+        });
+      } else {
+        swal("Your address is safe!");
+      }
+    });
+  
+  
+  }
+  </script>
+
+
+{% endblock %}

@@ -1,0 +1,400 @@
+{% load static %}
+<!DOCTYPE html>
+<html class="no-js" lang="zxx">
+  <!-- Mirrored from demo.graygrids.com/themes/shopgrids/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 06 Nov 2021 18:21:50 GMT -->
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>ShopGrids</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      href="{% static 'user/images/favicon.svg' %}"
+    />
+
+    <link rel="stylesheet" href="{% static 'user/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'user/css/LineIcons.3.0.css' %}" />
+    <link rel="stylesheet" href="{% static 'user/css/tiny-slider.css' %}" />
+    <link rel="stylesheet" href="{% static 'user/css/glightbox.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'user/css/main.css' %}" />
+
+    <!-- my account -->
+
+    <link rel="stylesheet" href="{% static 'user/css/myaccount/my_account.css' %}" />
+
+
+
+    <!-- ajax file -->
+
+    <script src="{% static 'user/js/ajax.js' %}"></script> 
+
+    <script type="script" src="jquery-3.5.1.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+      <!-- Include the PayPal JavaScript SDK -->
+      <script src="https://www.paypal.com/sdk/js?client-id=AQCsjnTTlChgWNxzSkkyNk7iA4n1lg5ANoBXCD2sZn-_X5T1Rt83zDLgwQF4DEQhMtBdqx1aDdNiKOLf&currency=USD"></script>
+
+
+   
+    
+
+
+
+    <style>
+
+      
+      .thumbnail{
+        object-fit: cover;
+        max-width: 180px;
+        max-height: 100px;
+        cursor: pointer;
+        opacity: 0.5;
+        margin: 5px;
+        border: 2px solid black;
+      
+      }
+      
+      .thumbnail:hover{
+        opacity:1;
+      }
+      
+      .active{
+        opacity: 1;
+      }
+      
+      #slide-wrapper{
+        margin-top: 30px;
+        max-width: 500px;
+        display: flex;
+        min-height: 100px;
+        align-items: center;
+      }
+      
+      #slider{
+        width: 440px;
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+      
+      }
+      
+      #slider::-webkit-scrollbar {
+          width: 8px;
+      
+      }
+
+       
+      #slider::-webkit-scrollbar-thumb {
+        background-color: #dede2e;
+        outline: 1px solid slategrey;
+         border-radius: 100px;
+      
+      }
+      
+      #slider::-webkit-scrollbar-thumb:hover{
+          background-color: #18b5ce;
+      }
+      
+      .arrow{
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        transition: .3s;
+      }
+      
+      .arrow:hover{
+        opacity: .5;
+        width: 35px;
+        height: 35px;
+      }
+      
+      #img-container{
+        z-index: 1;
+        max-width: 500px;
+        position: relative;
+      }
+      
+      #lens{
+        z-index: 2;
+        position: absolute;
+      
+        height: 125px;
+        width: 125px;
+        border:2px solid black;
+        background-repeat: no-repeat;
+        cursor: none;
+      
+      }
+      
+      /* IMAGE ZOOM CSS Start */
+      
+      
+      
+      /* IMAGE ZOOM CSS END */
+      
+      
+      .value-button {
+        display: inline-block;
+        border: 1px solid #ddd;
+        margin: 0px;
+        width: 40px;
+        height: 20px;
+        text-align: center;
+        vertical-align: middle;
+        padding: 11px 0;
+        background: #eee;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+      
+      .value-button:hover {
+        cursor: pointer;
+      }
+      
+      
+      
+    </style>
+    
+  </head>
+  <body>
+
+
+    <div class="preloader">
+      <div class="preloader-inner">
+        <div class="preloader-icon">
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </div>
+
+    <header class="header navbar-area">
+      <div class="topbar">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-lg-4 col-md-4 col-12">
+              <div class="top-left">
+                <div class="menu-top-link">
+              
+                      <p class="font-weight-bold">Welcome to Shopgrids.</p>
+
+
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-12">
+              <div class="top-middle">
+                <ul class="useful-links">
+                  <li><a href=""></a></li>
+                  <li><a href=""> </a></li>
+                  <li><a href=""> </a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-12">
+              <div class="top-end">
+                {% if user.id is None %}
+                <div class="user">
+                  <i class="lni lni-user"></i>
+                  Hello
+                </div>
+                <ul class="user-login">
+                  <li>
+                    <a href="{% url 'login' %}">Sign In</a>
+                  </li>
+                  <li>
+                    <a href="{% url 'register' %}">Register</a>
+                  </li>
+                </ul>
+                {% else %}
+                <div class="user">
+                  <i class="lni lni-user"></i>
+                  Hello <span style="text-transform: capitalize;">{{user.first_name}}</span>  
+                </div>
+                <ul class="user-login">
+                  <li>
+                    <a href="{% url 'my_account' %}">My Account</a>
+
+                  </li>
+                  <li>
+                    <a href="{% url 'logout' %}">Logout</a>
+                  </li>
+
+                </ul>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-middle">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-lg-3 col-md-3 col-7">
+              <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static 'user/images/logo/logo.svg' %}" alt="Logo" />
+              </a>
+            </div>
+            <div class="col-lg-5 col-md-7 d-xs-none">
+              <div class="main-menu-search">
+                <div class="navbar-search search-style-5">
+                  <div class="search-select">
+                    <div class="select-position">
+                      <select id="select1">
+                        <option selected>All</option>
+                        <option value="1">option 01</option>
+                        <option value="2">option 02</option>
+                        <option value="3">option 03</option>
+                        <option value="4">option 04</option>
+                        <option value="5">option 05</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="search-input">
+                    <input type="text" placeholder="Search" />
+                  </div>
+                  <div class="search-btn">
+                    <button><i class="lni lni-search-alt"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-2 col-5">
+              <div class="middle-right-area">
+                <div class="nav-hotline">
+
+                  {% if user.first_name is not None %}
+                  <i class="lni lni-wallet"></i>
+                  <h3>
+                    Wallet Amount:
+                    <span>₹ {{user.wallet_amount}}</span>
+                  </h3>
+                  {% else %}
+
+                  {% endif %}
+                </div>
+                <div class="navbar-cart">
+                  {% if user.first_name is not None %}
+
+                  <div class="wishlist" id = "wishlist_main_div_id">
+
+                    <a href="{% url 'wishlist' %}">
+                      <i class="lni lni-heart"></i>
+                      <span id="wishlist_count" class="total-items">{{wishlist_count}}</span>
+                    </a>
+                  </div>
+                  {% endif %}
+
+                  <div class="cart-items" id = "cart_main_div_id">
+                    <a href="{% url 'view_cart' %}" class="main-btn">
+                      <i class="lni lni-cart"></i>
+                      <span id="cart_count_id" class="total-items">{{cart_count}}</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- navbar -->
+{% include 'includes/navbar.html' %}
+<!-- navbar ends -->
+
+
+    </header>
+
+    {% block content %}
+
+    <!-- contents -->
+    {% endblock %}
+
+<!-- footer -->
+
+{% include 'includes/footer.html' %}
+
+<!-- footer ends -->
+
+<a href="#" class="scroll-top">
+    <i class="lni lni-chevron-up"></i>
+  </a>
+
+
+  
+
+  <script
+    data-cfasync="false"
+    src="https://demo.graygrids.com/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"
+  ></script>
+  <script src="{% static 'user/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'user/js/glightbox.min.js' %}"></script>
+  <script src="{% static './user/js/main.js' %}"></script>
+  <script src="{% static 'user/js/imagezoom.js' %}"></script>
+
+  <!-- validation -->
+  <script src="{% static 'user/js/validation.js' %}"></script>
+
+  
+
+
+  <!-- image zoom ends -->
+ 
+
+
+
+  <!-- <script>
+    const finaleDate = new Date("February 15, 2023 00:00:00").getTime();
+
+    const timer = () => {
+      const now = new Date().getTime();
+      let diff = finaleDate - now;
+      if (diff < 0) {
+        document.querySelector(".alert").style.display = "block";
+        document.querySelector(".container").style.display = "none";
+      }
+
+      let days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      let hours = Math.floor(
+        (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      );
+      let minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      let seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      days <= 99 ? (days = `0${days}`) : days;
+      days <= 9 ? (days = `00${days}`) : days;
+      hours <= 9 ? (hours = `0${hours}`) : hours;
+      minutes <= 9 ? (minutes = `0${minutes}`) : minutes;
+      seconds <= 9 ? (seconds = `0${seconds}`) : seconds;
+
+      document.querySelector("#days").textContent = days;
+      document.querySelector("#hours").textContent = hours;
+      document.querySelector("#minutes").textContent = minutes;
+      document.querySelector("#seconds").textContent = seconds;
+    };
+    timer();
+    setInterval(timer, 1000);
+  </script> -->
+
+  <!-- context_processor -->
+
+
+
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.2/toastify.js"></script> 
+
+
+
+</body>
+
+<!-- Mirrored from demo.graygrids.com/themes/shopgrids/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 06 Nov 2021 18:22:59 GMT -->
+</html>

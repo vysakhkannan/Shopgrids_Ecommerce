@@ -1,0 +1,933 @@
+{% extends 'user/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<style>
+ 
+
+  
+  .page-title {
+    text-align: left;
+  }
+  
+  .fa-user {
+    float: right;
+  }
+  
+  .fa-align-left {
+    margin-right: 15px;
+  }
+  
+  .amount-box img {
+    width: 50px;
+  }
+  
+  .amount {
+    font-size: 35px;
+  }
+  
+  .amount-box p {
+    margin-top: 10px;
+    margin-bottom: -10px;
+  }
+  
+  .btn-group {
+    margin: 20px 0;
+  }
+  
+  .btn-group .btn {
+    margin: 8px;
+    border-radius: 20px !important;
+    font-size: 14px;
+  }
+  
+  .txn-history {
+    text-align: left;
+  }
+  
+  .txn-list {
+    background-color: #fff;
+    padding: 12px 10px; 
+    color: #777;
+    font-size: 14px;
+    margin: 7px 0;
+  }
+  
+  
+
+  @media screen and (max-width: 800px){
+    .wallet-container {
+      height: 115%;
+      bottom: 20px;
+      margin-top: 100px;
+    }
+    
+  }
+</style>
+
+<div class="breadcrumbs">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 col-md-6 col-12">
+          <div class="breadcrumbs-content">
+            <h1 class="page-title">checkout</h1>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-12">
+          <ul class="breadcrumb-nav">
+            <li>
+              <a href="index.html"><i class="lni lni-home"></i> Home</a>
+            </li>
+            <li><a href="index.html">Shop</a></li>
+            <li>checkout</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="checkout-wrapper section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="checkout-steps-form-style-1">
+            <ul id="accordionExample">
+              <li>
+                <h6
+                  class="title collapsed"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseFour"
+                  aria-expanded="false"
+                  aria-controls="collapseFour"
+                >
+                  Add New Address
+                </h6>
+                <section
+                  class="checkout-steps-form-content collapse"
+                  id="collapseFour"
+                  aria-labelledby="headingFour"
+                  data-bs-parent="#accordionExample">
+                  <div class="row">
+                        <div class="col-md-12">
+                            <form action="{% url 'add_address' %}" method="POST" id="address_form_id">
+                                {% csrf_token %}
+
+                              <div class="single-form form-default">
+                                <label>Name</label>
+                                <div class="row">
+                                  <div class="col-md-6 form-input form">
+                                    <input type="text" placeholder="First Name" name = "first_name" id="user_first_name"/>
+                                    <span class="error_form" id="first_name_error_message"></span>
+
+                                  </div>
+                                  <div class="col-md-6 form-input form">
+                                    <input type="text" placeholder="Last Name" name = "last_name" id="user_last_name" />
+                                    <span class="error_form" id="last_name_error_message"></span>
+
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="single-form form-default">
+                                <label>Email Address</label>
+                                <div class="form-input form">
+                                  <input type="text" placeholder="Email Address" name="email" id="user_email" />
+                                  <span class="error_form" id="email_error_message"></span>
+
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="single-form form-default">
+                                <label>Phone Number</label>
+                                <div class="form-input form">
+                                  <input type="number" placeholder="Phone Number" onkeypress="return isNumber(event)" name = "phone_number" id="user_phone_number" oninput="javascript: if(this.value > this.maxLength) this.value = this.value.slice(0, this.maxLength)" maxlength="10"/>
+                                  <span class="error_form" id="phone_number_error_message"></span>
+
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-12">
+                              <div class="single-form form-default">
+                                <label>Mailing Address</label>
+                                <div class="form-input form">
+                                  <input type="text" placeholder="Mailing Address"  name= "address" id="user_address" />
+                                  <span class="error_form" id="address_error_message"></span>
+
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="single-form form-default">
+                                <label>City</label>
+                                <div class="form-input form">
+                                  <input type="text" placeholder="City"  name = "city" id="user_city"/>
+                                  <span class="error_form" id="city_error_message"></span>
+
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="single-form form-default">
+                                <label>Post Code</label>
+                                <div class="form-input form">
+                                  <input type="number" placeholder="Post Code" name="post_code" id="user_post_code" onkeypress="return isNumber(event)" oninput="javascript: if(this.value > this.maxLength) this.value = this.value.slice(0, this.maxLength)" maxlength="6" />
+                                  <span class="error_form" id="post_code_error_message"></span>
+
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="single-form form-default">
+                                <label>Country</label>
+                                <div class="form-input form">
+                                  <input type="text" placeholder="Country" name = "country" id="user_country"/>
+                                  <span class="error_form" id="country_error_message"></span>
+
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="single-form form-default">
+                                <label>Region/State</label>
+                                <div class="select-items">
+                                  <select class="form-control" name = "state" id="user_state" required>
+                                    <option value="">select</option>
+                                    <option value="kerala">Kerala</option>
+                                    <option value="tamilnadu">TamilNadu</option>
+                                    <option value="karnataka">Karnataka</option>
+                                    <option value="Goa">Goa</option>
+                                    <option value="Maharashtra">Maharashtra</option>
+                                  </select>
+                                  <span class="error_form" id="state_error_message"></span>
+
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-12">
+                              <div class="steps-form-btn button">
+                                <button type="submit" class="btn btn-alt"
+                                  >Save</button>
+                              </div>
+                            </div>
+                        </form>
+                        <div class="col-md-12">
+                            {% include 'includes/alert.html' %}
+                        </div>
+
+                  </div>
+                </section>
+            </li>
+            <!-- form starts -->
+            <form action="{% url 'place_order' %}" method="POST" id="checkout_form">
+              {% csrf_token %}
+
+            <li>
+              <h6
+                class="title"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseThree"
+                aria-expanded="true"
+                aria-controls="collapseThree"
+              >
+
+              <!-- address display -->
+
+                Available Address 
+              </h6>
+              <section
+                class="checkout-steps-form-content collapse show"
+                id="collapseThree"
+                aria-labelledby="headingThree"
+                data-bs-parent="#accordionExample"
+              >
+
+
+
+
+                <div class="row">
+
+                  <div class="col-md-12">
+                      {% for add in address %}
+                        <div class="form-check">
+                          <input class="form-check-input mailing_address_checked" type="radio" value="{{add.id}}" name="mailing_address" id="mailing_address_id" checked>
+                          <label class="form-check-label" for="flexRadioDefault1">
+                              <address>
+                                  {{add.address}}<br>
+                                  {{add.city}}<br>
+                                  {{add.state}}, {{add.post_code}}<br>
+                                  {{add.country}}<br>
+                                  Phone Number : {{add.phone_number}}
+                                </address>                            
+                          </label>
+                        </div>
+                      {% endfor %}
+                  </div>
+                </div>
+              </section>
+            </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- apply coupon  -->
+
+
+
+        <div class="col-lg-4">
+          <div class="checkout-sidebar">
+            <div class="checkout-sidebar-coupon" id="apply_coupon_div_id">
+              <p>Appy Coupon to get discount!</p>
+                <div class="single-form form-default">
+                  <div class="form-input form">
+                    <input type="text" name="apply_coupon" placeholder="Coupon Code" id="apply_coupon_id" oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength)" maxlength="8"/>
+                  </div>
+                  <div class="button">
+                    <a type="submit" onclick="apply_coupon()" class="btn">apply</a>
+                  </div>
+                </div>
+            </div>
+            
+
+            <div class="checkout-sidebar-price-table mt-30">
+
+                
+                <h5 class="title">Products</h5>
+                {% if cart_items.buy_now == True %}
+                  {% for product in products %}
+
+                    {% if cart_items.products_id.id == product.id %}
+
+                      <div class="sub-total-price">
+                        <div class="total-price">
+                        <p class="value">{{product.product_name}} <i class="lni lni-close"></i> {{cart_items.quantity}}</p>
+                        <p class="price"> ₹ {{cart_items.sub_total}}</p>
+                        </div>
+                      </div>
+
+                    {% endif %}
+
+                  {% endfor %}
+
+                {% else %}
+
+                {% for item in cart_items %}
+
+                    {% for product in products %}
+
+                        {% if item.products_id.id == product.id %}
+
+                        <div class="sub-total-price">
+                          <div class="total-price">
+                            <p class="value">{{product.product_name}} <i class="lni lni-close"></i> {{item.quantity}}</p>
+                            <p class="price"> ₹ {{item.sub_total}}</p>
+                          </div>
+                        </div>
+
+                        {% endif %}
+
+                    {% endfor %}
+
+                {% endfor %}
+
+                {% endif %}
+
+              </div>
+
+            <!-- payment method -->
+
+
+
+            <div class="checkout-sidebar-price-table mt-30">
+                <h5 class="title">Payment Method</h5>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" value="cash_on_delivery" name="payment_method" id="flexRadioDefault1" checked>
+                    <label class="form-check-label" for="flexRadioDefault1">
+                      Cash on delivery (COD)
+                    </label>
+                  </div>
+                  <div class="form-check" style="display: none;">
+                    <input class="form-check-input" type="radio" value="razor_pay" name="payment_method" id="flexRadioDefault2">
+                    <label class="form-check-label" for="flexRadioDefault2">
+                      Razor Pay
+                    </label>
+                  </div>
+                  <div class="form-check" style="display: none;">
+                    <input class="form-check-input" type="radio" value="paypal_pay" name="payment_method" id="flexRadioDefault3">
+                    <label class="form-check-label" for="flexRadioDefault3">
+                      Paypal
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" value="wallet_pay" name="payment_method" id="flexRadioDefault4">
+                    <label class="form-check-label" for="flexRadioDefault4">
+                      Wallet Pay
+                    </label>
+                  </div>
+
+                  <!-- Grand total field -->
+
+                  <input type="hidden" name="grand_total" value="{{grandtotal}}"  id="grand_total_hidden_field">
+
+
+                  <!-- payment id -->
+
+                  <input type="hidden" name="payment_id" id="payment_id_generated">
+                  
+                  <!-- paypal -->
+
+                  <div type id="paypal-button-container"></div>
+
+                  <!-- rayzor payment -->
+                  <div class="text-center btn_container">
+
+                    <!-- Payment Button -->
+                    <button type="button" class="btn btn-primary" onclick="rayzor_pay_details()" id="rzp-button1">Razor Pay</button>
+                    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+                  </div>
+
+
+            </div>
+
+            <!-- Wallet -->
+
+            <div class="checkout-sidebar-price-table mt-30" id="my_wallet_div_id">
+              <h5 class="title">My E-Wallet</h5>
+              <div class="wallet-container text-center">
+            
+                <div class="amount-box text-center mt-30" id="wallet_amount_total_id">
+                  <img src="https://lh3.googleusercontent.com/ohLHGNvMvQjOcmRpL4rjS3YQlcpO0D_80jJpJ-QA7-fQln9p3n7BAnqu3mxQ6kI4Sw" alt="wallet">
+                  <p>Total Balance</p>
+                  <p class="amount">₹ {{user.wallet_amount}}</p>
+                </div>
+              
+                <div class="btn-group text-center mt-30">
+                  <button type="button" onclick="walletPay()" class="btn btn-dark btn-rounded waves-effect waves-light">Use Wallet Money</button>                
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- pricing -->
+
+            <div class="checkout-sidebar-price-table mt-30">
+                
+              <h5 class="title">Pricing Table</h5>
+              <div class="sub-total-price">
+                <div class="total-price">
+                  <p class="value">Coupon Applied:</p>
+                  <p id="coupon_name_id" class="price">None</p>
+                </div>
+              </div>
+              <div class="sub-total-price" >
+                <div class="total-price">
+                  <p class="value">Coupon Percent:</p>
+                  <p class="price" id="coupon_percent_id">None</p>
+                </div>
+              </div>
+              <div class="sub-total-price" style="display: none;" id="wallet_div_id">
+                <div class="total-price">
+                  <p class="value">You saved</p>
+                  <p class="price" id="you_saved_amount"></p>
+                </div>
+              </div>
+
+              <div class="total-payable">
+                <div class="payable-price">
+                  <p class="value">Grand Total:</p>
+                  <p class="price" id="grand_total_id" >₹ {{grandtotal}}</p>
+                </div>
+              </div>
+              <div class="price-table-btn button">
+                <button type="submit" class="btn btn-alt">Proceed</button>
+              </div>
+            </div>
+
+      </form>
+
+          <!-- form ends -->
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+<script>
+
+
+
+
+
+
+
+   /*   creating csrf token */
+
+ function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+          }
+      }
+  }
+  return cookieValue;
+}
+
+      /* creating uuid  */
+
+function uuidv4() {
+  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+  );
+}
+
+var orderID = uuidv4()
+var url = "{% url 'paypal_payment' %}"
+var csrftoken = getCookie('csrftoken');
+var payment_methods = "PayPal"
+var redirecting_url = "{% url 'paypal_payment_success' %}"
+var error_redirecting_url = "{% url 'payment_error' %}"
+
+
+
+
+  // Render the PayPal button into #paypal-button-container
+  paypal.Buttons({
+
+      // Set up the transaction
+      createOrder: function(data, actions) {
+
+        var amount = document.getElementById('grand_total_hidden_field').value
+
+          return actions.order.create({
+              purchase_units: [{
+                  amount: {
+                      value: amount
+                  }
+              }]
+          });
+      },
+
+      // Finalize the transaction
+      onApprove: function(data, actions) {
+          return actions.order.capture().then(function(orderData) {
+              // Successful capture! For demo purposes:
+              // console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+              sendData();
+
+
+              function sendData(){
+
+                var amount = document.getElementById('grand_total_hidden_field').value
+                var address_id = document.querySelector('.mailing_address_checked:checked').value;
+                alert(address_id)
+                alert(typeof(address_id))
+
+
+                fetch(url, {
+                  method: 'POST', // or 'PUT'
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken,
+                  },
+                  body: JSON.stringify({
+                    orderID : orderID,
+                    transID : orderData.id,
+                    payment_methods : payment_methods,
+                    status : orderData.status,
+                    address_id : address_id,
+                    grand_total :  amount,
+                  }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                  console.log(data);
+                  console.log("success")
+                  window.location.href = redirecting_url + '?order_id='+data.new_order_id+'&trans_id='+data.transID;
+
+                })
+                .catch((error) => {
+                  window.location.href = error_redirecting_url;
+                });
+
+              }
+
+
+          });
+      }
+
+
+  }).render('#paypal-button-container');
+</script>
+
+<!-- razor pay  -->
+
+
+<script>
+
+function rayzor_pay_details(){
+
+var grand_total = document.getElementById('grand_total_hidden_field').value
+
+
+
+  var data = {
+    'total_amount' : grand_total,
+    'csrf_token' : '{{csrf_token}}',
+
+  }
+
+  if (document.getElementById('mailing_address_id') === null){
+
+    Swal.fire('Add Address')
+
+  return false;
+}
+
+else
+
+{
+  $.ajax({
+    url:"{% url 'razor_pay_details' %}",
+    type:"POST",
+    data: data,
+    success: function(response){
+
+    var grand_total = response.grand_total
+    var razor_pay_order_id = response.razor_pay_order_id
+    var currency = response.currency 
+    
+    
+    razor_function(grand_total, currency, razor_pay_order_id)
+    
+
+    
+    }
+    })
+
+  return true;
+
+}
+
+
+  
+
+
+}
+
+
+
+</script>
+
+
+<!-- razor pay function -->
+
+<script>
+  function razor_function(grand_total, currency, razor_pay_order_id){
+
+
+    var options = {
+      "key": 'rzp_test_iNvuoWcn7v4lLA', // Enter the Key ID generated from the Dashboard
+      "amount": grand_total, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+      "currency": currency,
+      "name": "Shopgrids",
+      "description": "Test Transaction",
+      "order_id": razor_pay_order_id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 2
+      "handler": function (response){
+
+
+            document.getElementById("payment_id_generated").value = razor_pay_order_id;
+            document.getElementById("flexRadioDefault2").checked = true;
+            $('#checkout_form').submit()
+
+
+
+      },
+
+  };
+  var rzp1 = new Razorpay(options);
+  rzp1.on('payment.failed', function (response){
+    window.location.href = error_redirecting_url;
+
+  });
+  document.getElementById('rzp-button1').onclick = function(e){
+
+
+
+  }
+  rzp1.open();
+  e.preventDefault();
+
+
+
+  }
+
+
+
+
+
+
+  </script>
+
+  <script>
+
+    // Apply coupon
+
+
+          function apply_coupon(){
+
+
+            var coupon_id = document.getElementById('apply_coupon_id').value
+
+           var data = {
+                'coupon_id': coupon_id,
+                'csrf_token' : '{{csrf_token}}',
+            
+        
+            }
+            $.ajax({
+                url:"{% url 'coupon_apply' %}",
+                type:"POST",
+                data: data,
+                success: function(response){
+
+                  if (response.coupon_status == 1){
+
+                  Toastify({
+          
+                    text: "Coupon Expired",
+                    duration: 3000,
+                    style: {
+                        background: "linear-gradient(to right, #ff512f",
+                      }
+      
+                    }).showToast();
+
+
+                  }
+
+
+                    else if (response.coupon_status == 2){
+
+                      Toastify({
+          
+                        text: "You have already used this coupon",
+                        duration: 3000,
+                        style: {
+                            background: "linear-gradient(to right, #ff512f",
+                          }
+          
+                        }).showToast();
+                    }
+
+                    else if (response.coupon_status == 3){
+
+
+                      console.log('success')
+                      Toastify({
+          
+                          text: "Coupon Applied Successfully",
+                          duration: 3000,
+                          style: {
+                          background: "linear-gradient(to right, #ff512f",
+                      }
+      
+                      }).showToast();
+                  
+
+                      applied_coupon_total = response.applied_coupon_total
+                      coupon_name = response.coupon_name
+                      coupon_percent = response.coupon_percent
+          
+                
+                      document.getElementById('grand_total_id').innerText = '₹' + applied_coupon_total
+                      document.getElementById("grand_total_hidden_field").value = applied_coupon_total
+
+                      document.getElementById("coupon_name_id").innerText = coupon_name
+                      $("#coupon_name_id").css("color","#17CC19");
+
+                      document.getElementById("coupon_percent_id").innerText = coupon_percent + '% off'
+                      $("#coupon_percent_id").css("color","#17CC19");
+
+                    }
+
+
+
+                    
+                }
+            }) 
+        
+        
+        }
+
+
+  </script>
+
+<script>
+
+  $("#checkout_form").submit(function (){
+
+
+
+    if (document.getElementById('mailing_address_id') === null){
+
+        Swal.fire('Add Address')
+
+      return false;
+    }
+
+    else
+
+    {
+
+      return true;
+
+    }
+    
+  })
+
+
+  $("#rzp-button1").submit(function (){
+
+
+
+    if (document.getElementById('mailing_address_id') === null){
+
+        Swal.fire('Add Address')
+
+      return false;
+    }
+
+    else
+
+    {
+
+      return true;
+
+    }
+    
+  })
+
+  
+</script>
+
+<!-- Wallet pay -->
+
+<script>
+
+  function walletPay(){
+  
+  var grand_total = document.getElementById('grand_total_hidden_field').value
+  alert(grand_total)
+
+   var data = {
+        'grand_total': grand_total,
+        'csrf_token' : '{{csrf_token}}',
+    
+
+    }
+
+    $.ajax({
+        url:"{% url 'wallet_amount_check' %}",
+        type:"POST",
+        data: data,
+        success: function(response){
+
+          if (response.status == 1){
+
+            var new_grand_total = response.new_grand_total
+            document.getElementById('grand_total_id').innerText = '₹' + new_grand_total
+            document.querySelector('[name="payment_method"]').value = 'wallet_pay'
+            Toastify({
+  
+              text: "Wallet Amount is applied",
+              duration: 3000,
+              style: {
+                  background: "linear-gradient(to right, #ff512f",
+                }
+  
+              }).showToast();            
+            $('#checkout_form').submit()
+            
+          }
+          else if( response.status == 0){
+
+            Toastify({
+  
+              text: "No Sufficient Wallet Money",
+              duration: 3000,
+              style: {
+                  background: "linear-gradient(to right, #ff512f",
+                }
+  
+              }).showToast(); 
+
+
+          }
+          else if (response.status == 3){
+
+
+            var new_grand_total = response.new_grand_total
+            var saved_amount = response.saved_money
+            document.getElementById('grand_total_id').innerText = '₹' + new_grand_total
+            document.getElementById('grand_total_hidden_field').value = new_grand_total
+
+            document.getElementById('you_saved_amount').innerText = '₹' + saved_amount
+            $("#you_saved_amount").css("color","#17CC19");
+            document.getElementById('wallet_div_id').style.display='block'
+            $("#wallet_amount_total_id").load(location.href + " #wallet_amount_total_id");     
+
+            Toastify({
+  
+              text: "Wallet Amount is applied",
+              duration: 3000,
+              style: {
+                  background: "linear-gradient(to right, #ff512f",
+                }
+  
+              }).showToast();            
+            
+          }
+          else{
+
+          
+          Toastify({
+  
+            text: "No sufficient balance",
+            duration: 3000,
+            style: {
+                background: "linear-gradient(to right, #ff512f",
+              }
+
+            }).showToast();    
+            
+          }
+          
+        }
+          
+    }) 
+
+
+}
+
+
+
+</script>
+
+
+{% endblock %}

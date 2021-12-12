@@ -1,0 +1,182 @@
+{% extends 'user/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg">
+
+  <div id = "ordered_items" class="container mt-5 mb-5">
+    <div class="row">
+    <aside class="col-md-3">
+      {% include 'user/my_account_base.html' %}
+    </aside>
+    <main class="col-md-9">
+        <div class="card mb-4">
+            <div class="card-header py-3">
+              <h5 class="mb-0">EDIT ADDRESS</h5>
+            </div>
+            <div class="card-body">
+              <form action = "" method = "POST">
+                  {% csrf_token %}
+                <!-- 2 column grid layout with text inputs for the first and last names -->
+                <div class="row mb-4">
+                  <div class="col">
+                    <div class="form-outline">
+                      <input type="text" id="form7Example1" class="form-control" name="first_name" value="{{address.first_name}}"/>
+                      <label class="form-label" for="form7Example1">First name</label>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-outline">
+                      <input type="text" id="form7Example2" class="form-control" name="last_name" value="{{address.last_name}}"/>
+                      <label class="form-label" for="form7Example2">Last name</label>
+                    </div>
+                  </div>
+                </div>
+      
+                <!-- Text input -->
+                <div class="form-outline mb-4">
+                  <input type="email" id="form7Example3" class="form-control" name="email" value="{{address.email}}"/>
+                  <label class="form-label" for="form7Example3">Email</label>
+                </div>
+      
+                <!-- Text input -->
+                <div class="form-outline mb-4">
+                  <input type="text" id="form7Example4" class="form-control" name="phone_number" value="{{address.phone_number}}"/>
+                  <label class="form-label" for="form7Example4">Phone Number</label>
+                </div>
+      
+                <!-- Email input -->
+                <div class="form-outline mb-4">
+                  <input type="text" id="form7Example5" class="form-control" name="address" value="{{address.address}}"/>
+                  <label class="form-label" for="form7Example5">Address</label>
+                </div>
+      
+                <!-- Number input -->
+                <div class="form-outline mb-4">
+                    <input type="text" id="form7Example6" class="form-control" name="country" value="{{address.country}}"/>
+                    <label class="form-label" for="form7Example6">Country</label>
+                  </div>
+                <!-- Number input -->
+                <div class="form-outline mb-4">
+                    <input type="text" id="form7Example6" class="form-control" name="city" value="{{address.city}}"/>
+                    <label class="form-label" for="form7Example6">City</label>
+                  </div>
+                <!-- Number input -->
+                <div class="form-outline mb-4">
+                    <input type="number" id="form7Example6" class="form-control" name="post_code" value="{{address.post_code}}"/>
+                    <label class="form-label" for="form7Example6">Post Code</label>
+                  </div>
+      
+                <!-- Message input -->
+                <div class="form-outline mb-4">
+                        <label>Region/State</label>
+                        <div class="select-items">
+                          <select class="form-control" name = "state">
+                            <option value="{{address.state}}">{{address.state}}</option>
+                            <option value="kerala">Kerala</option>
+                            <option value="tamilnadu">TamilNadu</option>
+                            <option value="karnataka">Karnataka</option>
+                            <option value="Goa">Goa</option>
+                            <option value="Maharashtra">Maharashtra</option>
+                          </select>
+                        </div>
+                </div>
+      
+                <!-- Checkbox -->
+                <div class="form-check d-flex justify-content-center mb-2">
+                    <button type="submit" class="btn btn-primary">Change</button>
+
+                </div>
+              </form>
+            </div>
+          </div>
+
+    </main>
+  </div> <!-- row.// -->
+  </div>
+  
+  
+  </section>
+  <!-- ========================= SECTION CONTENT END// ========================= -->
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+
+  <script>
+
+    /* cancel order 
+
+    function cancel_order(id){
+      alert(id)
+
+      var data = {
+    
+          'order_id' :id,
+          'csrf_token' : '{{csrf_token}}',
+    
+      }
+      swal({
+        title: "Are you sure?",
+        text: "Once Cancelled, you will not be able to retrive the order!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+    
+    
+          $.ajax({
+            url:"{% url 'cancel_order' %}",
+            type:"POST",
+            data: data,
+              dataType: "html",
+              success: function () {
+                  $("#ordered_items").load(location.href + " #ordered_items");            
+        
+              }
+        
+          });
+          
+          swal("You cancelled your order!", {
+            icon: "success",
+          });
+        } else {
+          swal("Your order is safe!");
+        }
+      });
+    
+    
+    }
+
+
+
+  $('.list-group-item').click(function() {
+    $(this).removeClass('list-group-item');
+    $(this).addClass('list-group-item active');
+});
+
+
+$('.list-group-item active').click(function() {
+  $(this).removeClass('list-group-item active');
+  $(this).addClass('list-group-item');
+}); */
+
+
+
+
+
+  </script>
+
+  
+  
+
+  
+
+
+
+
+{% endblock %}
+

@@ -1,0 +1,132 @@
+{% extends 'admin/adminbase.html' %}
+
+
+{% block content %}
+<!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                                    <h4 class="mb-sm-0 font-size-18">Banner Management</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Ecommerce</a></li>
+                                            <li class="breadcrumb-item active">Banner Management</li>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row" id="banner_div_id">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header d-flex justify-content-between">
+                                        <div>
+                                            <h4 class="card-title">Banner</h4>
+                                        </div>
+                                        <div>
+                                            <a href="{% url 'add_banner' %}"><button type="button" class="btn btn-primary" >Add Banner</button></a>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-rep-plugin">
+                                            <div class="table-responsive mb-0" data-pattern="priority-columns">
+                                                <table id="tech-companies-1" class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Index</th>
+                                                            <th data-priority="1">Image</th>
+                                                            <th data-priority="3">Product</th>
+                                                            <th data-priority="1">Description</th>
+                                                            <th data-priority="1">Delete</th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for banner in banners %}
+
+                                                        <tr>
+                                                            <th>{{ forloop.counter }}</th>
+                                                            <td><img width="120px" src="{{banner.image.url}}" alt=""></td>
+                                                            <td>{{banner.product.product_name}}</td>
+                                                            <td>{{banner.description}}</td>
+                                                            <td><a onclick="delete_banner('{{banner.id}}')" class="btn btn-outline-secondary btn-sm trash" title="DELETE"><i class="fas fa-trash-alt"></i></a></td>
+                                                            
+
+
+                                                        </tr>
+
+                                                        {% endfor %}
+                                                        
+                                                    </tbody>
+                                                </table>
+                                            </div>
+        
+                                        </div>
+        
+                                    </div>
+                                </div>
+                                <!-- end card -->
+                            </div> <!-- end col -->
+                        </div> <!-- end row -->
+                        
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+<script>
+
+    function delete_banner(id){
+
+        var data = {
+      
+            'banner_id' :id,
+            'csrf_token' : '{{csrf_token}}',
+      
+        }
+        swal({
+          title: "Are you sure?",
+          text: "Once deleted, you will not be able to recover the deleted product!",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+      
+      
+            $.ajax({
+              url:"{% url 'delete_banner' %}",
+              type:"POST",
+              data: data,
+                dataType: "html",
+                success: function () {
+                    $("#banner_div_id").load(location.href + " #banner_div_id");            
+          
+                }
+          
+            });
+            
+            swal("Poof! Your product has been deleted!", {
+              icon: "success",
+            });
+          } else {
+            swal("Your product is safe!");
+          }
+        });
+      
+      
+      }
+</script>
+
+{% endblock %}

@@ -1,0 +1,151 @@
+{% extends 'admin/adminbase.html' %}
+
+{% block content %}
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                                    <h4 class="mb-sm-0 font-size-18">Coupon Management</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Ecommerce</a></li>
+                                            <li class="breadcrumb-item active">Coupon Management</li>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row" >
+                            <div class="col-12">
+                                <div class="card" id="coupon_div_id">
+                                    <div class="card-header d-flex justify-content-between">
+
+                                        <div>
+                                            <h4 class="card-title">Coupon Available</h4>
+                                            <!-- <p class="card-title-desc">DataTables has most features enabled by
+                                                default, so all you need to do to use it with your own tables is to call
+                                                the construction function: <code>$().DataTable();</code>.
+                                            </p> -->
+
+                                        </div>
+
+
+                                        <div>
+                                            <div>
+                                                <a href = "{% url 'add_coupon' %}" type="button" class="btn btn-primary waves-effect waves-light w-sm">
+                                                    Add Coupon
+                                                </a>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {% include 'includes/alert.html' %}
+
+                                    <div class="card-body">
+        
+                                        <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
+                                            <thead>
+                                            <tr>
+                                                <th>Index</th>
+                                                <th>Coupon ID</th>
+                                                <th>Coupon Name</th>
+                                                <th>Coupon Percent</th>
+                                                <th>Coupon Status</th>
+                                                <th>Expiry Date</th>
+                                                <th>Delete</th>
+                                            </tr>
+                                            </thead>
+        
+        
+                                            <tbody>
+                                                {% for coupon in coupons %}
+                                            <tr>
+                                                <td>{{forloop.counter}}</td>
+                                                <td>{{coupon.coupon_id}}</td>
+                                                <td>{{coupon.coupon_name}}</td>
+                                                <td>{{coupon.coupon_percent}}</td>
+                                                <td>{{coupon.coupon_status}}</td>
+                                                <td>{{coupon.expiry_date}}</td>
+                                                <td> <a onclick="delete_coupon('{{coupon.id}}')" class="btn btn-outline-secondary btn-sm edit" title="Delete">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </a></td>
+                                                </tr>
+
+                                                {% endfor %}
+
+                                            </tbody>
+                                        </table>
+        
+                                    </div>
+                                </div>
+                            </div> <!-- end col -->
+                        </div> <!-- end row -->
+        
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+<!-- coupon delete -->
+
+<script>
+
+    function delete_coupon(id){
+
+        var data = {
+      
+            'coupon_id' :id,
+            'csrf_token' : '{{csrf_token}}',
+      
+        }
+        swal({
+          title: "Are you sure?",
+          text: "Once deleted, you will not be able to recover the deleted cart item!",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+      
+      
+            $.ajax({
+              url:"{% url 'delete_coupon' %}",
+              type:"POST",
+              data: data,
+                dataType: "html",
+                success: function () {
+                    $("#coupon_div_id").load(location.href + " #coupon_div_id");            
+          
+                }
+          
+            });
+            
+            swal("Poof! Your category has been deleted!", {
+              icon: "success",
+            });
+          } else {
+            swal("Your category item is safe!");
+          }
+        });
+      
+      
+      }
+
+</script>
+
+
+{% endblock %}

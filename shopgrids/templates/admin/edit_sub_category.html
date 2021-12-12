@@ -1,0 +1,88 @@
+{% extends 'admin/adminbase.html' %}
+
+
+{% block content %}
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<div class="main-content">
+
+    <div class="page-content">
+        <div class="container-fluid">
+                        <!-- start page title -->
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                        <h4 class="mb-sm-0 font-size-18">Category</h4>
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Edit Category</a></li>
+    
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title -->
+
+            <div class="row">
+                <div class="d-flex justify-content-center">
+
+                    <div class="tab-pane" id="seller-details">
+                        <div class="text-center mb-4">
+                            <h5>Edit Category</h5>
+                        </div>
+                        <div class="text-center mb-4">
+                            {% include 'includes/alert.html' %}
+                        </div>
+                        <form action="{% url 'edit_sub_category' subcategory.id %}" method="POST" id = sub_category_edit_form>
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label for="basicpill-firstname-input" class="form-label">Sub Category Name</label>
+                                        <input type="text" name = "sub_category_name"  value = "{{subcategory.sub_category_name}}" class="form-control" id="basicpill-firstname-input">
+                                    </div>
+                                    <span class="error_form" id="sub_category_error_message"></span>
+
+                                </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label for="basicpill-address-input" class="form-label">Description</label>
+                                        <textarea id="basicpill-address-input" name = "description" class="form-control" rows="2">{{subcategory.description}}</textarea>
+                                    </div>
+                                    <span class="error_form" id="description_error_message"></span>
+
+                                </div>
+                            <div class="row">
+                                <div class="col-12">
+
+
+                                    <label for="basicpill-address-input" class="form-label">Category</label>
+                                        <select name = "category_id" class="form-select" aria-label="Default select example">
+                                            {% for cat in categories %}
+                                            {% if subcategory.catergory_id.id == cat.id %}
+                                            <option value="{{cat.id}}"selected>{{subcategory.catergory_id}}</option>
+                                            {% endif %}
+                                            <option value="{{cat.id}}">{{cat.category_name}}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                </div>
+                            </div>
+                            <ul class="pager wizard twitter-bs-wizard-pager-link">
+                                <button type="submit" class="btn btn-primary">Submit </button>
+                            </ul>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+</div>
+            
+
+{% endblock %}

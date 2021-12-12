@@ -1,0 +1,96 @@
+{% extends 'admin/adminbase.html' %}           
+{% load static %}
+{% block content %}
+            ==============================================================
+    <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                                    <h4 class="mb-sm-0 font-size-18">User Management</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Ecommerce</a></li>
+                                            <li class="breadcrumb-item active">User Management</li>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title">Example</h4>
+                                        <p class="card-title-desc">This is an experimental awesome solution for responsive tables with complex data.</p>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-rep-plugin">
+                                            <div class="table-responsive mb-0" data-pattern="priority-columns">
+                                                <table id="tech-companies-1" class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th data-priority="1">Id</th>
+                                                            <th data-priority="3">First Name</th>
+                                                            <th data-priority="1">Last Name</th>
+                                                            <th data-priority="3">Username</th>
+                                                            <th data-priority="3">Email</th>
+                                                            <th data-priority="6">Phone Number</th>
+                                                            <th data-priority="6">Active</th>
+                                                            <th data-priority="6">Status</th>
+                                                            <th data-priority="6"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for user in users %}
+                                                        <tr>
+                                                            <th scope="row">{{user.id}}</th>
+                                                            <td>{{user.first_name}}</td>
+                                                            <td>{{user.last_name}}</td>
+                                                            <td>{{user.username}}</td>
+                                                            <td>{{user.email}}</td>
+                                                            <td>{{user.phone_number}}</td>
+                                                            <td>{{user.is_active}}</td>
+                                                            <td>{% if user.is_active == True %}
+
+                                                                <a href="{% url 'user_status' user.id %}"><i class="mdi mdi-lock-check-outline"></i><span>Block</span></a>
+                                                                {% else %}
+                                                                <a href="{% url 'user_status' user.id %}"><i class="mdi mdi-lock-open-minus-outline"></i><span>Unblock</span></a>
+                                                                    
+                                                                {% endif %}
+                                                            </a></td>
+
+                                            
+                                                            
+                                                        </tr>
+                                                        {% endfor %}
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+        
+                                        </div>
+        
+                                    </div>
+                                </div>
+                                <!-- end card -->
+                            </div> <!-- end col -->
+                        </div> <!-- end row -->
+                        
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+            
+        {% endblock %}

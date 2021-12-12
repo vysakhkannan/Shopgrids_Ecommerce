@@ -1,0 +1,81 @@
+{% extends 'user/base.html' %}
+
+
+{% block content %}
+
+<div class="breadcrumbs">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 col-md-6 col-12">
+        <div class="breadcrumbs-content">
+          <h1 class="page-title">Order Details</h1>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-6 col-12">
+        <ul class="breadcrumb-nav">
+          <li>
+            <a href="index.html"><i class="lni lni-home"></i>Home</a>
+          </li>
+          <li><a href="index.html">Cart</a></li>
+
+          <li><a href="index.html">Checkout</a></li>
+          <li>Order Details</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="container mt-5 mb-5">
+    <div class="row order-success text-center font-weight-bolder text-dark border border-light mt-5 mb-5">
+        
+        <p class="h1 p-5 " > <i class="lni lni-checkmark"></i> Thank you. Your order has been received.</p>
+
+
+
+  
+    </div>
+
+    <div class="row">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Order ID</th>
+            <th scope="col">Payment Method</th>
+            <th scope="col">Order Status</th>
+            <th scope="col">Delivery Address</th>
+            <th scope="col">Grand Total</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">{{order_id}}</th>
+            <td>{{payment_method}}</td>
+            <td>{{order_status}}</td>
+            <td>{{order_address}}</td>
+            <td>{{grand_total}}</td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="row text-center mt-5 mb-5">
+
+      <h3>You will be automatically redirected to Home page in 5 sec.....</h3>
+
+    </div>
+    <div class="row text-center mt-5 mb-5">
+      <a href="{% url 'home' %}"><button type="button" class="btn btn-primary">Home</button></a>
+
+    </div>
+</div>
+
+<script>
+  setTimeout(function(){
+    window.location.href = "{% url 'home' %}";
+ }, 5000);
+</script>
+
+{% endblock %}

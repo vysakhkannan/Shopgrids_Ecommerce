@@ -1,0 +1,239 @@
+ {% extends 'admin/adminbase.html' %}
+
+ {% load static %}
+
+ {% block content %}
+ <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content" >
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-10">
+                                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                                    <h4 class="mb-sm-0 font-size-18">Category Management</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Category Management</a></li>
+                                            <li class="breadcrumb-item active">Category</li>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                                
+                            </div>
+
+
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row" id="category_div">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <h4 class="card-title">Categories</h4>
+                                                <p class="card-title-desc">List of categories</p>
+                                            </div>
+                                            <a href = "{% url 'add_category' %}" type="button" class="btn btn-primary waves-effect waves-light w-sm">
+                                                Add Category
+                                            </a>
+                                        
+                                        </div>
+
+                                    
+
+                                    </div>
+
+                                    <div class="card-body" >
+        
+                                        <div class="table-responsive">
+                                            <table class="table table-editable table-nowrap align-middle table-edits">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Category ID</th>
+                                                        <th>Category Name</th>
+                                                        <th>Slug</th>
+                                                        <th>Select Offer</th>
+                                                        <th>Offer Available</th>
+                                                        <th>Offer Name</th>
+                                                        <th>Description</th>
+                                                        <th>Edit</th>
+                                                        <th>Delete</th>
+                                                    </tr>
+                                                </thead>
+                                                {% for category in categories %}
+                                                <tbody>
+                                                    <tr data-id="1">
+                                                        <td data-field="id" style="width: 80px">{{category.id}}</td>
+                                                        <td data-field="name">{{category.category_name}}</td>
+                                                        <td data-field="age">{{category.slug}}</td>
+                                                        <td data-field="age">
+                                                            <div class="btn-group">
+                                                                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Select Offer <i class="mdi mdi-chevron-down"></i></button>
+                                                                <div class="dropdown-menu">
+                                                                    {% for offer in offers %}
+                                                                    <a class="dropdown-item" onclick="offer_update('{{offer.id}}','{{category.id}}')">{{offer.offer_name}}</a>
+                                                                    {% endfor %}
+                                                                    <a class="dropdown-item" onclick="offer_delete('{{category.id}}')">None</a>
+
+
+                                                                </div>
+                                                            </div><!-- /btn-group -->
+                                                        </td>
+                                                        {% if category.offer_status == 'True' %}
+                                                            
+
+                                                            <td data-field="age"><button type="button" class="btn btn-outline-success waves-effect waves-light" disabled>Offer Applied</button>
+                                                            </td>
+                                                        {% else %}
+
+                                                        <td data-field="age"><button type="button" class="btn btn-outline-danger waves-effect waves-light" disabled>Expired</button>
+                                                        </td>                                            
+
+
+                                                        {% endif %}
+                                                        <td data-field="gender">{{category.offer_name}}</td>
+
+
+                                                        <td data-field="gender">{{category.description}}</td>
+                                                        <td style="width: 100px">
+                                                            <a href = "{% url 'edit_category' category.id %}" onclick="return confirm('Are you sure?')" class="btn btn-outline-secondary btn-sm edit" title="Edit">
+                                                                <i class="fas fa-pencil-alt"></i>
+                                                            </a>
+                                                        </td>
+                                                        <td style="width: 100px">
+
+                                                            <a onclick="delete_category('{{category.id}}')" class="btn btn-outline-secondary btn-sm edit" title="Delete">
+                                                                <i class="fas fa-trash-alt"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                    
+                                                </tbody>
+                                                {% endfor %}
+                                                </table>
+                                        </div>
+        
+                                    </div>
+                                </div>
+                            </div> <!-- end col -->
+                        </div> <!-- end row -->
+                        
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+
+<script>
+
+    function delete_category(id){
+
+        var data = {
+      
+            'category_id' :id,
+            'csrf_token' : '{{csrf_token}}',
+      
+        }
+        swal({
+          title: "Are you sure?",
+          text: "Once deleted, you will not be able to recover the deleted cart item!",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+      
+      
+            $.ajax({
+              url:"{% url 'delete_category' %}",
+              type:"POST",
+              data: data,
+                dataType: "html",
+                success: function () {
+                    $("#category_div").load(location.href + " #category_div");            
+          
+                }
+          
+            });
+            
+            swal("Poof! Your category has been deleted!", {
+              icon: "success",
+            });
+          } else {
+            swal("Your category item is safe!");
+          }
+        });
+      
+      
+      }
+
+      // Offer Update
+
+      function offer_update(offer_id,category_id){
+
+        var data = {
+      
+            'offer_id' :offer_id,
+            'category_id': category_id,
+            'csrf_token' : '{{csrf_token}}',
+      
+        }
+        $.ajax({
+            url:"{% url 'category_offer_update' %}",
+            type:"POST",
+            data: data,
+            success: function(response){
+      
+      
+              $("#category_div").load(location.href + " #category_div");
+      
+                  
+                
+                
+            }
+        })
+        
+      }
+
+            // Offer Update
+
+            function offer_delete(category_id){
+
+                var data = {
+              
+                    'category_id': category_id,
+                    'csrf_token' : '{{csrf_token}}',
+              
+                }
+                $.ajax({
+                    url:"{% url 'category_offer_delete' %}",
+                    type:"POST",
+                    data: data,
+                    success: function(response){
+              
+              
+                      $("#category_div").load(location.href + " #category_div");
+              
+                          
+                        
+                        
+                    }
+                })
+                
+              }
+
+</script>
+
+
+
+
+{% endblock %}

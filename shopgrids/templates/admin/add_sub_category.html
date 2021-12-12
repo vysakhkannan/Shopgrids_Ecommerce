@@ -1,0 +1,84 @@
+{% extends 'admin/adminbase.html' %}
+
+
+{% block content %}
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<div class="main-content">
+
+    <div class="page-content">
+        <div class="container-fluid">
+                        <!-- start page title -->
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                        <h4 class="mb-sm-0 font-size-18">Sub Category</h4>
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a href="{% url 'sub_category' %}">Sub Category Management</a></li>
+                                <li class="breadcrumb-item active">Add Sub Category</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title -->
+
+            <div class="row">
+                <div class="d-flex justify-content-center">
+
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header text-center">
+                                <h4 class="card-title">ADD</h4>
+                                <p class="card-title-desc">Fill the form <code>correctly</code>.</p>
+                            
+                            </div>
+                            {% include 'includes/alert.html' %}
+                            <div class="card-body">
+                                <form action="{% url 'add_sub_category' %}" method="POST" id="add_sub_category_form">
+                                    {% csrf_token %}
+
+                                    <div class="mb-4">
+                                        <label for="basicpill-firstname-input" class="form-label">Sub Category Name</label>
+                                        <input type="text" name = "sub_category_name" class="form-control" id="basicpill-firstname-input">
+                                        <span class="error_form" id="sub_category_error_message"></span>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label for="basicpill-address-input" class="form-label">Description</label>
+                                        <textarea id="basicpill-address-input" name = "description" class="form-control" rows="2"></textarea>
+                                        <span class="error_form" id="description_error_message"></span>
+
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="basicpill-address-input" class="form-label">Category</label>
+                                        <select name = "category" class="form-select" aria-label="Default select example">
+                                            <option selected value="{{ categories.0.id }}">{{ categories.0 }}</option>
+                                            {% for cat in categories %}
+                                            <option value="{{cat.id}}">{{cat.category_name}}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-4 text-center">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+
+                                    </div>
+
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+</div>
+            
+
+{% endblock %}

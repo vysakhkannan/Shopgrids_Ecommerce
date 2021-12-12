@@ -1,0 +1,78 @@
+{% extends 'user/base.html' %}
+
+{% load static %}
+
+{% block content %}
+<!-- OTP LOGIN  -->
+<div class="breadcrumbs">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 col-md-6 col-12">
+          <div class="breadcrumbs-content">
+            <h1 class="page-title">OTP ENTER</h1>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-12">
+          <ul class="breadcrumb-nav">
+            <li>
+              <a href="index.html"><i class="lni lni-home"></i> Home</a>
+            </li>
+            <li>OTP Login</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="account-login section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-12">
+          <form class="card login-form" method="POST" action="{% url 'verify_otp' %}" >
+            {% csrf_token %}
+            <div class="card-body">
+              <div class="title">
+                <h3>OTP</h3>
+              </div>
+
+              {% include 'includes/alert.html' %}
+              <div class="form-group input-group">
+                <label for="reg-fn">Enter the OTP received in your SMS</label>
+                <input
+                  class="form-control"
+                  type="number"
+                  id="reg-username"
+                  name = "otp_input"
+                  onkeypress="return isNumber(event)" onpaste="return false;"     
+                  oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength = "6"
+                />
+                <input type="text" name="phone_number" hidden value="{{phone_number}}">
+              </div>
+              <div class="button">
+                <button class="btn" type="submit">Login</button>
+              </div>
+              <p class="outer-link">
+                You have an account?
+                <a href="{% url 'login' %}">Register here </a>
+              </p>
+
+            </div>
+            <div class="alt-option">
+              <span>Or</span>
+            </div>
+            <p class="outer-link">
+              Don't have an account?
+              <a href="{% url 'register' %}">Register here </a>
+            </p>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- login ends -->
+
+
+
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'user/base.html' %}
+
+{% block content %}
+<style>
+    .m-5{
+        margin: 100px !important;
+    }
+</style>
+
+<div class="container">
+
+
+    <div class="row m-5 text-center">
+        <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">Payment Failed !</h4>
+            <p>Unfortunately payment was rejected</p>
+            <hr>
+            <p class="mb-0">Click the button below to redirect to Home page.</p>
+          </div>
+    </div>
+    <div class="row m-5 text-center">
+        <div class="col">
+            <button type="button" class="btn btn-primary">Home</button>
+
+
+        </div>
+
+
+    </div>
+</div>
+
+{% endblock %}

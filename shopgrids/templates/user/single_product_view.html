@@ -1,0 +1,672 @@
+{% extends 'user/base.html' %}
+
+{% load static %}
+
+{% block content %}
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<div class="breadcrumbs">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 col-md-6 col-12">
+          <div class="breadcrumbs-content">
+            <h1 class="page-title">Single Product</h1>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-12">
+          <ul class="breadcrumb-nav">
+            <li>
+              <a href="index.html"><i class="lni lni-home"></i> Home</a>
+            </li>
+            <li><a href="index.html">Shop</a></li>
+            <li>Single Product</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="item-details section">
+    <div class="container">
+      <div class="top-area">
+        <div class="row align-items-center">
+          <div class="col-lg-6 col-md-12 col-12">
+            <div class="product-images">
+              <main id="gallery">
+                <div id="img-container">
+                  <div id="lens"></div>
+
+                  <img
+                    src="{{product.product_cover.url}}"
+                    id="main_image"
+                    alt="#"
+                    xoriginal = "{{product.product_cover.url}}"
+                    
+                  />
+                </div>
+                <div class="images">
+                  {% for image in images %}
+                  <img
+                    src="{{image.image.url}}"
+                    class="img my_image xzoom-gallery"
+                    data-image_src={{image.image.url}}
+                    data-action = "change"
+                    alt="#"
+                  />
+                  {% endfor %}
+                
+                </div>
+              </main>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-12 col-12">
+            <div class="product-info">
+              <h2 style="text-transform: capitalize;" class="title">{{product.product_name}}</h2>
+              <p class="category" style="text-transform: capitalize;">
+                <i class="lni lni-tag"></i> {{product.sub_category.catergory_id}}<a
+                  href="javascript:void(0)"
+                  > > {{product.sub_category.sub_category_name}}</a
+                >
+              </p>
+
+              {% if product.stocks == 0 %}
+
+              <h3 class="price">₹{{product.sale_price}}</h3>
+
+              {% else %}
+                  {% if product.category.offer_status == 'True' %}
+
+                  <h3 class="price">₹{{product.sale_price}}<span >₹{{product.old_sale_price}}</span><p class="text-success"> {{ product.category.offer_percent }} % off</p></h3>
+
+                  {% elif product.offer_status == 'True' %}
+
+                  <h3 class="price">₹{{product.sale_price}}<span >₹{{product.old_sale_price}}</span><p class="text-success"> {{ product.offer_percent }} % off</p></h3>
+
+
+                  {% else %}
+
+                  <h3 class="price">₹{{product.sale_price}}</h3>
+
+                  {% endif %}
+
+              {% endif %}
+
+              <p class="info-text" style="text-transform: capitalize;">
+                {{product.description}}
+              </p>
+              <div class="row">
+
+                <!-- <div class="col-lg-4 col-md-4 col-12">
+                  <div class="form-group color-option">
+                    <label class="title-label" for="size">Choose color</label>
+                    <div class="single-checkbox checkbox-style-1">
+                      <input type="checkbox" id="checkbox-1" checked />
+                      <label for="checkbox-1"><span></span></label>
+                    </div>
+                    <div class="single-checkbox checkbox-style-2">
+                      <input type="checkbox" id="checkbox-2" />
+                      <label for="checkbox-2"><span></span></label>
+                    </div>
+                    <div class="single-checkbox checkbox-style-3">
+                      <input type="checkbox" id="checkbox-3" />
+                      <label for="checkbox-3"><span></span></label>
+                    </div>
+                    <div class="single-checkbox checkbox-style-4">
+                      <input type="checkbox" id="checkbox-4" />
+                      <label for="checkbox-4"><span></span></label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-12">
+                  <div class="form-group">
+                    <label for="color">Battery capacity</label>
+                    <select class="form-control" id="color">
+                      <option>5100 mAh</option>
+                      <option>6200 mAh</option>
+                      <option>8000 mAh</option>
+                    </select>
+                  </div>
+                </div> -->
+
+              </div>
+              <div class="bottom-content">
+                <div class="row align-items-end">
+                  {% if product.stocks == 0 %}
+
+                  <div class="col-lg-4 col-md-4 col-12">
+                    <div class="button cart-button">
+                      <button class="btn btn-warning" disabled
+                      ><i class="lni lni-cart"></i>Out Of Stock</button>
+                    </div>
+                  </div>
+
+
+
+                  {% else %}
+                  <div class="col-lg-4 col-md-4 col-12">
+                    <div class="button cart-button">
+                      <button class="btn" id="add_cart" style="width: 100%" onclick="add_to_cart('{{product.id}}', '{{user.id}}')">
+                        <i class="lni lni-cart"></i>
+                        Add to Cart
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-4 col-12">
+                    <div class="button cart-button">
+                      <a href="{% url 'buy_now' product.id %}" class="btn" id="add_cart" style="width: 100%">
+                        <button class="btn" style="width: 100%">
+                          <i class="lni lni-cart"></i>
+                          Buy Now
+                        </button>
+                        
+                      </a>
+                    </div>
+                  </div>
+                  {% endif %}
+
+                  <div class="col-lg-4 col-md-4 col-12">
+                    <div class="wish-button">
+                      <button class="btn" id="add_wishlist" onclick = "add_to_wishlist('{{product.id}}')" >
+                        <i class="lni lni-heart"></i> To Wishlist
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="product-details-info">
+        <div class="single-block">
+          <div class="row">
+            <div class="col-lg-6 col-12">
+              <div class="info-body custom-responsive-margin">
+                <h4>Details</h4>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna
+                  aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                  ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                  Duis aute irure dolor in reprehenderit in voluptate velit
+                  esse cillum dolore eu fugiat.
+                </p>
+                <h4>Features</h4>
+                <ul class="features">
+                  <li>Capture 4K30 Video and 12MP Photos</li>
+                  <li>Game-Style Controller with Touchscreen</li>
+                  <li>View Live Camera Feed</li>
+                  <li>Full Control of HERO6 Black</li>
+                  <li>Use App for Dedicated Camera Operation</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-lg-6 col-12">
+              <div class="info-body">
+                <h4>Specifications</h4>
+                <ul class="normal-list">
+                  <li><span>Weight:</span> 35.5oz (1006g)</li>
+                  <li><span>Maximum Speed:</span> 35 mph (15 m/s)</li>
+                  <li>
+                    <span>Maximum Distance:</span> Up to 9,840ft (3,000m)
+                  </li>
+                  <li><span>Operating Frequency:</span> 2.4GHz</li>
+                  <li><span>Manufacturer:</span> GoPro, USA</li>
+                </ul>
+                <h4>Shipping Options:</h4>
+                <ul class="normal-list">
+                  <li><span>Courier:</span> 2 - 4 days, $22.50</li>
+                  <li><span>Local Shipping:</span> up to one week, $10.00</li>
+                  <li>
+                    <span>UPS Ground Shipping:</span> 4 - 6 days, $18.00
+                  </li>
+                  <li>
+                    <span>Unishop Global Export:</span> 3 - 4 days, $25.00
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4 col-12">
+            <div class="single-block give-review">
+              <h4>4.5 (Overall)</h4>
+              <ul>
+                <li>
+                  <span>5 stars - 38</span>
+                  <i class="lni lni-star-filled"></i>
+                  <i class="lni lni-star-filled"></i>
+                  <i class="lni lni-star-filled"></i>
+                  <i class="lni lni-star-filled"></i>
+                  <i class="lni lni-star-filled"></i>
+                </li>
+                <li>
+                  <span>4 stars - 10</span>
+                  <i class="lni lni-star-filled"></i>
+                  <i class="lni lni-star-filled"></i>
+                  <i class="lni lni-star-filled"></i>
+                  <i class="lni lni-star-filled"></i>
+                  <i class="lni lni-star"></i>
+                </li>
+                <li>
+                  <span>3 stars - 3</span>
+                  <i class="lni lni-star-filled"></i>
+                  <i class="lni lni-star-filled"></i>
+                  <i class="lni lni-star-filled"></i>
+                  <i class="lni lni-star"></i>
+                  <i class="lni lni-star"></i>
+                </li>
+                <li>
+                  <span>2 stars - 1</span>
+                  <i class="lni lni-star-filled"></i>
+                  <i class="lni lni-star-filled"></i>
+                  <i class="lni lni-star"></i>
+                  <i class="lni lni-star"></i>
+                  <i class="lni lni-star"></i>
+                </li>
+                <li>
+                  <span>1 star - 0</span>
+                  <i class="lni lni-star-filled"></i>
+                  <i class="lni lni-star"></i>
+                  <i class="lni lni-star"></i>
+                  <i class="lni lni-star"></i>
+                  <i class="lni lni-star"></i>
+                </li>
+              </ul>
+
+              <button
+                type="button"
+                class="btn review-btn"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+              >
+                Leave a Review
+              </button>
+            </div>
+          </div>
+          <div class="col-lg-8 col-12">
+            <div class="single-block">
+              <div class="reviews">
+                <h4 class="title">Latest Reviews</h4>
+
+                <div class="single-review">
+                  <img src="{% static 'user/images/blog/comment1.jpg' %}" alt="#" />
+                  <div class="review-info">
+                    <h4>
+                      Awesome quality for the price
+                      <span>Jacob Hammond </span>
+                    </h4>
+                    <ul class="stars">
+                      <li><i class="lni lni-star-filled"></i></li>
+                      <li><i class="lni lni-star-filled"></i></li>
+                      <li><i class="lni lni-star-filled"></i></li>
+                      <li><i class="lni lni-star-filled"></i></li>
+                      <li><i class="lni lni-star-filled"></i></li>
+                    </ul>
+                    <p>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                      sed do eiusmod tempor...
+                    </p>
+                  </div>
+                </div>
+
+                <div class="single-review">
+                  <img src="{% static 'user/images/blog/comment2.jpg' %}" alt="#" />
+                  <div class="review-info">
+                    <h4>
+                      My husband love his new...
+                      <span>Alex Jaza </span>
+                    </h4>
+                    <ul class="stars">
+                      <li><i class="lni lni-star-filled"></i></li>
+                      <li><i class="lni lni-star-filled"></i></li>
+                      <li><i class="lni lni-star-filled"></i></li>
+                      <li><i class="lni lni-star-filled"></i></li>
+                      <li><i class="lni lni-star"></i></li>
+                    </ul>
+                    <p>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                      sed do eiusmod tempor...
+                    </p>
+                  </div>
+                </div>
+
+                <div class="single-review">
+                  <img src="{% static 'user/images/blog/comment3.jpg' %}" alt="#" />
+                  <div class="review-info">
+                    <h4>
+                      I love the built quality...
+                      <span>Jacob Hammond </span>
+                    </h4>
+                    <ul class="stars">
+                      <li><i class="lni lni-star-filled"></i></li>
+                      <li><i class="lni lni-star-filled"></i></li>
+                      <li><i class="lni lni-star-filled"></i></li>
+                      <li><i class="lni lni-star-filled"></i></li>
+                      <li><i class="lni lni-star-filled"></i></li>
+                    </ul>
+                    <p>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                      sed do eiusmod tempor...
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+    </div>
+  </section>
+
+  <div
+    class="modal fade review-modal"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Leave a Review</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="review-name">Your Name</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  id="review-name"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="review-email">Your Email</label>
+                <input
+                  class="form-control"
+                  type="email"
+                  id="review-email"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="review-subject">Subject</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  id="review-subject"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="review-rating">Rating</label>
+                <select class="form-control" id="review-rating">
+                  <option>5 Stars</option>
+                  <option>4 Stars</option>
+                  <option>3 Stars</option>
+                  <option>2 Stars</option>
+                  <option>1 Star</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="review-message">Review</label>
+            <textarea
+              class="form-control"
+              id="review-message"
+              rows="8"
+              required
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal-footer button">
+          <button type="button" class="btn">Submit Review</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    //   <!-- add to cart -->
+
+    function add_to_cart(product_id, user_id){
+
+      console.log(product_id)
+      console.log(user_id)
+      var data = {
+          'product_id': product_id,
+          'user_id' :user_id,
+          'csrf_token' : '{{csrf_token}}',
+      
+  
+      }
+      $.ajax({
+          url:"{% url 'add_cart' %}",
+          type:"POST",
+          data: data,
+          success: function(data){
+            if (data.status == 1){
+
+              Toastify({
+      
+                text: "Item already in cart",
+                duration: 3000,
+                style: {
+                    background: "linear-gradient(to right, #ff512f",
+                  }
+  
+                }).showToast();
+
+
+
+            }
+            else{
+
+              console.log('success')
+              Toastify({
+      
+                text: "Item added to cart",
+                duration: 3000,
+                style: {
+                    background: "linear-gradient(to right, #ff512f",
+                  }
+  
+                }).showToast();
+              
+                $("#cart_main_div_id").load(location.href + " #cart_main_div_id");   
+            }
+         
+
+            
+              
+          }          
+      })
+  
+  
+  }
+
+
+
+  </script>
+
+  <script>
+
+ //   image zoom
+
+
+     document.getElementById('img-container').addEventListener('mouseover', function(){
+       imageZoom('main_image')
+       
+     })
+     
+     function imageZoom(imgID){
+     let img = document.getElementById(imgID)
+     let lens = document.getElementById('lens')
+     
+     lens.style.backgroundImage = `url( ${img.src} )`
+     
+     let ratio = 3
+     
+     lens.style.backgroundSize = (img.width * ratio) + 'px ' + (img.height * ratio) + 'px';
+     
+     img.addEventListener("mousemove", moveLens)
+     lens.addEventListener("mousemove", moveLens)
+     img.addEventListener("touchmove", moveLens)
+     
+     function moveLens(){
+       /*
+           Function sets sets position of lens over image and background image of lens
+           1 - Get cursor position
+           2 - Set top and left position using cursor position - lens width & height / 2
+           3 - Set lens top/left positions based on cursor results
+           4 - Set lens background position & invert
+           5 - Set lens bounds
+       
+           */
+     
+           //1
+       let pos = getCursor()
+       //console.log('pos:', pos)
+     
+       //2
+       let positionLeft = pos.x - (lens.offsetWidth / 2)
+       let positionTop = pos.y - (lens.offsetHeight / 2)
+     
+       //5
+       if(positionLeft < 0 ){
+         positionLeft = 0
+       }
+     
+       if(positionTop < 0 ){
+         positionTop = 0
+       }
+     
+       if(positionLeft > img.width - lens.offsetWidth /3 ){
+         positionLeft = img.width - lens.offsetWidth /3
+       }
+     
+       if(positionTop > img.height - lens.offsetHeight /3 ){
+         positionTop = img.height - lens.offsetHeight /3
+       }
+     
+     
+       //3
+       lens.style.left = positionLeft + 'px';
+       lens.style.top = positionTop + 'px';
+     
+       //4
+       lens.style.backgroundPosition = "-" + (pos.x * ratio) + 'px -' +  (pos.y * ratio) + 'px'
+     }
+     
+     function getCursor(){
+       /* Function gets position of mouse in dom and bounds
+            of image to know where mouse is over image when moved
+           
+           1 - set "e" to window events
+           2 - Get bounds of image
+           3 - set x to position of mouse on image using pageX/pageY - bounds.left/bounds.top
+           4- Return x and y coordinates for mouse position on image
+           
+            */
+     
+           let e = window.event
+           let bounds = img.getBoundingClientRect()
+     
+           //console.log('e:', e)
+           //console.log('bounds:', bounds)
+           let x = e.pageX - bounds.left
+       let y = e.pageY - bounds.top
+       x = x - window.pageXOffset;
+       y = y - window.pageYOffset;
+       
+       return {'x':x, 'y':y}
+     }
+     
+     }
+     
+
+  // Add to Wishlist
+
+        //   <!-- add to cart -->
+
+        function add_to_wishlist(product_id){
+
+          console.log(product_id)
+          var data = {
+              'product_id': product_id,
+              'csrf_token' : '{{csrf_token}}',
+          
+      
+          }
+          $.ajax({
+              url:"{% url 'add_to_wishlist' %}",
+              type:"POST",
+              data: data,
+              success: function(data){
+    
+                if (data.status == 1){
+    
+                  Toastify({
+          
+                    text: "Item already in Wishlist",
+                    duration: 3000,
+                    style: {
+                        background: "linear-gradient(to right, #ff512f",
+                      }
+      
+                    }).showToast();
+    
+    
+    
+                }
+                else{
+    
+                  console.log('success')
+                  Toastify({
+          
+                    text: "Item added to wishlist",
+                    duration: 3000,
+                    style: {
+                        background: "linear-gradient(to right, #ff512f",
+                      }
+      
+                    }).showToast();
+
+                    $("#wishlist_main_div_id").load(location.href + " #wishlist_main_div_id");   
+
+
+                  
+                }
+             
+    
+                
+                  
+              }
+          })
+      
+      
+      }
+     
+  </script>
+
+
+{% endblock %}

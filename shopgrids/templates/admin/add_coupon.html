@@ -1,0 +1,96 @@
+{% extends 'admin/adminbase.html' %}
+
+
+{% block content %}
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<div class="main-content">
+
+    <div class="page-content">
+        <div class="container-fluid">
+                        <!-- start page title -->
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                        <h4 class="mb-sm-0 font-size-18">Add Coupon</h4>
+
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Coupon Management</a></li>
+                                <li class="breadcrumb-item active">Add Coupon</li>
+                            </ol>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+                        <!-- end page title -->
+
+            <div class="row">
+                <div class="d-flex justify-content-center">
+
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header text-center">
+                                <h4 class="card-title">ADD</h4>
+                                <p class="card-title-desc">Fill the form <code>correctly</code>.</p>
+                            
+                            </div>
+                            {% include 'includes/alert.html' %}
+                            <div class="card-body">
+                                <form action="{% url 'add_coupon' %}" method="POST" id="coupon_add_id" > 
+                                    {% csrf_token %}
+
+                                    <div class="mb-4">
+                                        <label class="form-label" for="default-input">Coupon Name</label>
+                                        <input class="form-control" name="coupon_name" type="text" id="coupon_name_id" placeholder="Default input">
+                                        <span class="error_form" id="coupon_name_error_message"></span>
+
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label" for="default-input">Coupon offer Percent</label>
+                                        <input class="form-control" name="coupon_percent" type="number" id="coupon_percent_id" placeholder="Default input">
+                                        <span class="error_form" id="coupon_percent_error_message"></span>
+
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label" for="default-input">Coupon Expiry Date</label>
+                                        <input class="form-control" name="expiry_date" type="date" id="coupon_expiry_date_id" placeholder="Default input">
+                                        <span class="error_form" id="expiry_date_error_message"></span>
+
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label" for="default-input">Coupon Expiry Time</label>
+                                        <input class="form-control" name="expiry_time" type="time" id="coupon_expiry_time_id" placeholder="Default input">
+                                        <span class="error_form" id="expiry_time_error_message"></span>
+
+                                    </div>
+
+                                    <div class="mb-4 text-center">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+
+                                    </div>
+
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+</div>
+
+
+
+
+
+            
+
+{% endblock %}

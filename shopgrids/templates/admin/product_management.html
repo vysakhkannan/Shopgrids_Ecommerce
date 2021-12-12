@@ -1,0 +1,251 @@
+{% extends 'admin/adminbase.html' %}
+
+{% block content %}
+
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                                    <h4 class="mb-sm-0 font-size-18">Products Management</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Ecommerce</a></li>
+                                            <li class="breadcrumb-item active">Product Management</li>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row" id="product_div_id">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="d-flex justify-content-between">                                                <div>
+                                                    <h4 class="card-title">Products</h4>
+                                                    <p class="card-title-desc">List of all produtcs <code></code>.
+                                                    </p>
+                                                </div>
+
+                                                <a href = "{% url 'add_products' %}" type="button" class="btn btn-primary waves-effect waves-light w-sm">
+                                                    Add Products
+                                                </a>
+                                        </div>
+                                    
+                                    <div class="card-body">
+        
+                                        <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
+                                            <thead>
+                                            <tr>
+                                                <th>Product Index</th>
+                                                <th>Product Name</th>
+                                                <th>Image</th>
+                                                <th>Category Name</th>
+                                                <th>Sub Category Name</th>
+                                                <th>Descrition</th>
+                                                <th>MRP</th>
+                                                <th>Sale Price</th>
+                                                <th>Select Offer</th>
+                                                <th>Offer Available</th>
+                                                <th>Offer Name</th>
+                                                <th>Offer Applied</th>
+                                                <th>Stock</th>
+                                                <th>Edit</th>
+                                                <th>Delete</th>
+                                            </tr>
+                                            </thead>
+        
+                                            {% for product in products %}
+
+                                            <tbody>
+                                            <tr>
+                                                <td>{{forloop.counter}}</td>
+                                                <td>{{product.product_name}}</td>
+                                                <td>
+                                                    <!-- {% for img in images%}
+                                                    {%if img.product_id.id == product.id%}
+                                                    <img src="{{img.image.url}}"  width="30">
+                                                    {% endif %}
+                                                        {% endfor %} -->
+                                                    <img src="{{product.product_cover.url}}"  width="30">
+
+
+                                                </td>
+                                                <td>{{product.sub_category.catergory_id}}</td>
+                                                <td>{{product.sub_category.sub_category_name}}</td>
+                                                <td>
+
+                                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{product.description}}">
+                                                        <button class="btn btn-primary" style="pointer-events: none;" type="button" >Description</button>
+                                                      </span>
+
+
+                                                    
+                                                </td>
+                                                <td>{{product.mrp}}</td>
+                                                <td>{{product.sale_price}}</td>
+                                                <td>
+                                                    <div class="btn-group">
+                                                        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Select Offer <i class="mdi mdi-chevron-down"></i></button>
+                                                        <div class="dropdown-menu">
+                                                            {% for offer in offers %}
+                                                            <a class="dropdown-item" onclick="product_offer_update('{{offer.id}}','{{product.id}}')">{{offer.offer_name}}</a>
+                                                            {% endfor %}
+                                                            <a class="dropdown-item" onclick="product_offer_delete('{{product.id}}')">None</a>
+
+
+                                                        </div>
+                                                    </div><!-- /btn-group -->
+                                                </td>
+                                                {% if product.offer_status == 'True' %}    
+
+                                                    <td><button type="button" class="btn btn-outline-success waves-effect waves-light" disabled>Available</button>
+                                                    </td>
+
+                                                {% else %}
+
+                                                    <td><button type="button" class="btn btn-outline-danger waves-effect waves-light" disabled>Expired</button>
+                                                    </td>                                            
+
+
+                                                {% endif %}
+                                                <td>{{product.offer_name}}</td>
+                                                <td>{{product.offer_applied}}</td>
+
+                                                <td>{{product.stocks}}</td>
+
+
+                                                <td><a href = "{% url 'edit_product' product.id %}" onclick="return confirm('Are you sure?')" class="btn btn-outline-secondary btn-sm edit" title="Edit"><i class="fas fa-pencil-alt"></i></a></td>
+                                                <td><a onclick="delete_product_product('{{product.id}}')" class="btn btn-outline-secondary btn-sm trash" title="DELETE"><i class="fas fa-trash-alt"></i></a></td>
+
+                                            </tr>
+                                            </tbody>
+                                            {% endfor %}
+                                        </table>
+        
+                                    </div>
+                                </div>
+                            </div> <!-- end col -->
+                        </div> <!-- end row -->
+                    </div>
+                </div>
+            </div>
+
+
+<script>
+    function delete_product_product(id){
+
+        var data = {
+      
+            'product_id_id' :id,
+            'csrf_token' : '{{csrf_token}}',
+      
+        }
+        swal({
+          title: "Are you sure?",
+          text: "Once deleted, you will not be able to recover the deleted product!",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+      
+      
+            $.ajax({
+              url:"{% url 'delete_product_product' %}",
+              type:"POST",
+              data: data,
+                dataType: "html",
+                success: function () {
+                    $("#product_div_id").load(location.href + " #product_div_id");            
+          
+                }
+          
+            });
+            
+            swal("Poof! Your product has been deleted!", {
+              icon: "success",
+            });
+          } else {
+            swal("Your product is safe!");
+          }
+        });
+      
+      
+      }
+
+      // Product Offer Update
+
+      function product_offer_update(offer_id,product_id){
+
+        var data = {
+      
+            'offer_id' :offer_id,
+            'product_id': product_id,
+            'csrf_token' : '{{csrf_token}}',
+      
+        }
+        $.ajax({
+            url:"{% url 'product_offer_update' %}",
+            type:"POST",
+            data: data,
+            success: function(response){
+      
+      
+              $("#product_div_id").load(location.href + " #product_div_id");
+      
+                  
+                
+                
+            }
+        })
+        
+      }
+
+            // Product Offer Update
+
+            function product_offer_delete(product_id){
+
+                var data = {
+              
+                    'product_id': product_id,
+                    'csrf_token' : '{{csrf_token}}',
+              
+                }
+                $.ajax({
+                    url:"{% url 'product_offer_delete' %}",
+                    type:"POST",
+                    data: data,
+                    success: function(response){
+              
+              
+                      $("#product_div_id").load(location.href + " #product_div_id");
+              
+                          
+                        
+                        
+                    }
+                })
+                
+            }
+
+
+</script>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,185 @@
+{% extends 'user/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg">
+
+  <div id = "ordered_items" class="container mt-5 mb-5">
+    <div class="row">
+      
+    <aside class="col-md-3">
+      {% include 'user/my_account_base.html' %}
+    </aside>
+    <main class="col-md-9">
+      <h1>Orders</h1>
+      {% for order in orders %}
+
+      <article class="card mt-5 mb-5">
+      <header class="card-header">
+        <strong class="d-inline-block mr-3">Order ID: {{order.order_id}}</strong>
+        <br>
+        <span>Order Status: {{order.delivery_status}}</span>
+      </header>
+      <div class="card-body">
+        <div class="row"> 
+          <div class="col-md-8">
+            <h6 class="text-muted">Delivery to</h6>
+            <p>{{order.delivered_address}} <br>  
+              
+             </p>
+          </div>
+          <div class="col-md-4">
+            <h6 class="text-muted">Payment Method :</h6>
+
+
+
+            <span class="text-success">
+              <i class="fab fa-lg fa-cc-visa"></i>
+                {{order.payment_method}}
+            </span>
+            <p><br>
+             <span class="b">Grand Total: ₹ {{order.grand_total}} </span>
+            </p>
+          </div>
+        </div> <!-- row.// -->
+      </div> <!-- card-body .// -->
+      <div class="table-responsive">
+      <table class="table table-hover">
+        {% for sub_order in sub_orders %}
+
+          {% for product in products %}
+
+            {% if sub_order.order.id == order.id %}
+
+              {% if product.id == sub_order.products_id.id %}
+
+              <tr>
+                <td width="65">
+                  <img src="{{product.product_cover.url}}" class="img-xs border">
+                </td>
+                <td> 
+                  <p class="title mb-0">{{product.product_name}} </p>
+                  <var class="price text-muted">INR {{product.sale_price}}</var>
+                </td>
+                <td> Quantity : {{sub_order.quantity}} </td>
+                <td width="250"> <a href="{% url 'single_product_view' product.id %}" class="btn btn-outline-primary">Details</a></td>
+              </tr>
+
+              {% endif %}
+
+            {% endif %}
+
+          {% endfor %}
+          
+        {% endfor %}
+
+
+      </table>
+      <div class="d-flex justify-content-center mb-3">
+        {% if order.delivery_status == 'cancelled' %}
+
+          <button class="btn btn-outline-danger" disabled>Order Cancelled</button>
+
+        {% elif order.delivery_status == 'delivered' %}
+
+        <button class="btn btn-outline-success" disabled>Delivered</button>
+
+        {% else %}
+
+          <button onclick="cancel_order('{{order.id}}')" class="btn btn-outline-danger">Cancel order</button>
+
+        {% endif %}
+
+      </div>
+      </div> <!-- table-responsive .end// -->
+      </article> <!-- order-group.// --> 
+      {% endfor %}
+
+    </main>
+  </div> <!-- row.// -->
+  </div>
+  
+  
+  </section>
+  <!-- ========================= SECTION CONTENT END// ========================= -->
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+
+  <script>
+
+    /* cancel order */
+
+    function cancel_order(id){
+
+      var data = {
+    
+          'order_id' :id,
+          'csrf_token' : '{{csrf_token}}',
+    
+      }
+      swal({
+        title: "Are you sure?",
+        text: "Once Cancelled, you will not be able to retrive the order!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+    
+    
+          $.ajax({
+            url:"{% url 'cancel_order' %}",
+            type:"POST",
+            data: data,
+              dataType: "html",
+              success: function () {
+                  $("#ordered_items").load(location.href + " #ordered_items");            
+        
+              }
+        
+          });
+          
+          swal("You cancelled your order!", {
+            icon: "success",
+          });
+        } else {
+          swal("Your order is safe!");
+        }
+      });
+    
+    
+    }
+
+
+
+  $('.list-group-item').click(function() {
+    $(this).removeClass('list-group-item');
+    $(this).addClass('list-group-item active');
+});
+
+
+$('.list-group-item active').click(function() {
+  $(this).removeClass('list-group-item active');
+  $(this).addClass('list-group-item');
+});
+
+
+
+
+
+  </script>
+
+  
+  
+
+  
+
+
+
+
+{% endblock %}
+

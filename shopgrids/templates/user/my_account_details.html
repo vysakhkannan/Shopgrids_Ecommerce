@@ -1,0 +1,405 @@
+{% extends 'user/base.html' %} {% block content %}
+
+<style>
+  .btn {
+    font-size: 20px;
+    border-radius: 10px;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+<div class="container">
+  <div class="row mt-5 text-center">
+    <h1>My Account</h1>
+  </div>
+
+  <div class="row mt-5">
+    <div class="col-6 d-flex justify-content-around">
+      <div class="card text-center" style="width: 18rem; height: 15rem">
+        <div class="card-body">
+          <!-- <h5 class="card-title">Special title treatment</h5>
+          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
+          <!-- Button trigger modal -->
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop"
+          >
+            My Details
+          </button>
+
+          <!-- Modal -->
+          <div
+            class="modal fade "
+            id="staticBackdrop"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+            tabindex="-1"
+            aria-labelledby="staticBackdropLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="staticBackdropLabel">
+                    Details
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  {% include 'includes/alert.html' %}
+                  <form
+                    method="POST"
+                    action="{% url 'change_account_details' %}"
+                  >
+                    {% csrf_token %}
+                    <div class="form-row">
+                      <div class="form-group col-md-12">
+                        <label for="inputEmail4">First Name</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="inputEmail4"
+                          name="first_name"
+                          value="{{current_user.first_name}}"
+                        />
+                      </div>
+                      <div class="form-group col-md-12">
+                        <label for="inputPassword4">Last name</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="inputPassword4"
+                          name="last_name"
+                          value="{{current_user.last_name}}"
+                        />
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-group col-md-12">
+                        <label for="inputEmail4">Email</label>
+                        <input
+                          type="email"
+                          class="form-control"
+                          id="inputEmail4"
+                          name="email"
+                          value="{{current_user.email}}"
+                          placeholder="Email"
+                        />
+                      </div>
+                      <div class="form-group col-md-12">
+                        <label for="inputPassword4">Username</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="inputPassword4"
+                          name="username"
+                          value="{{current_user.username}}"
+                          placeholder="Password"
+                        />
+                      </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                      <label for="inputAddress">Phone Number</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="inputAddress"
+                        name="phone_number"
+                        value="{{current_user.phone_number}}"
+                        placeholder="1234 Main St"
+                      />
+                    </div>
+
+    
+
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                  <button type="button" class="btn btn-primary">
+                    Change Details
+                  </button>
+                </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- My Order -->
+
+    <div class="col-6 d-flex justify-content-around">
+      <div class="card text-center" style="width: 18rem; height: 15rem">
+        <div class="card-body">
+          <!-- <h5 class="card-title">Special title treatment</h5>
+          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal2">
+            My Orders
+          </button>
+
+          <!-- Modal -->
+          <div class="modal w-100 fade modal-dialog-scrollable" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">My Orders</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                  <main class="col-md-12" id="order_div_id">
+                    <h1>Orders</h1>
+                    {% for order in orders %}
+              
+                    <article class="card mt-5 mb-5">
+                    <header class="card-header">
+                      <strong class="d-inline-block mr-3">Order ID: {{order.order_id}}</strong>
+                      <br>
+                      <span>Order Status: {{order.delivery_status}}</span>
+                    </header>
+                    <div class="card-body">
+                      <div class="row"> 
+                        <div class="col-md-12">
+                          <h6 class="text-muted">Delivery to</h6>
+                          <p>{{order.delivered_address}} <br>  
+                            
+                           </p>
+                        </div>
+                        <div class="col-md-12 mt-4">
+                          <h6 class="text-muted">Payment Method :</h6>
+              
+                          <span class="text-success">
+                            <i class="fab fa-lg fa-cc-visa"></i>
+                              {{order.payment_method}}
+                          </span>
+                          <p><br>
+                           <span  class="b">Grand Total: ₹ {{order.grand_total}} </span>
+                          </p>
+                        </div>
+                      </div> <!-- row.// -->
+                    </div> <!-- card-body .// -->
+                    <div class="table-responsive">
+                    <table class="table table-hover">
+                      {% for sub_order in sub_orders %}
+              
+                        {% for product in products %}
+              
+                          {% if sub_order.order.id == order.id %}
+              
+                            {% if product.id == sub_order.products_id.id %}
+              
+                            <tr>
+                              <td width="65">
+                                <img src="{{product.product_cover.url}}" class="img-xs border">
+                              </td>
+                              <td> 
+                                <p class="title mb-0">{{product.product_name}} </p>
+                                <var class="price text-muted">INR {{product.sale_price}}</var>
+                              </td>
+                              <td> Quantity : {{sub_order.quantity}} </td>
+                              <td width="250"> <a href="{% url 'single_product_view' product.id %}" class="btn btn-outline-primary">Details</a></td>
+                            </tr>
+              
+                            {% endif %}
+              
+                          {% endif %}
+              
+                        {% endfor %}
+                        
+                      {% endfor %}
+              
+              
+                    </table>
+                    <div class="d-flex justify-content-center mb-3">
+                      {% if order.delivery_status == 'cancelled' %}
+              
+                        <button class="btn btn-outline-danger" disabled>Order Cancelled</button>
+              
+                      {% elif order.delivery_status == 'delivered' %}
+              
+                      <button class="btn btn-outline-success" disabled>Delivered</button>
+              
+                      {% else %}
+              
+                        <button onclick="cancel_order('{{order.id}}')" class="btn btn-outline-danger">Cancel order</button>
+              
+                      {% endif %}
+              
+                    </div>
+                    </div> <!-- table-responsive .end// -->
+                    </article> <!-- order-group.// --> 
+                    {% endfor %}
+              
+                  </main>
+
+
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row mt-5 mb-5">
+
+    <!-- User Address -->
+
+    
+    <div class="col-6 d-flex justify-content-around">
+      <div class="card text-center" style="width: 18rem; height: 15rem">
+        <div class="card-body">
+          <!-- <h5 class="card-title">Special title treatment</h5>
+          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal3" data-bs-target="#exampleModal">
+          Address
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">User Address</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+
+              
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-6 d-flex justify-content-around">
+      <div class="card text-center" style="width: 18rem; height: 15rem">
+        <div class="card-body">
+          <!-- <h5 class="card-title">Special title treatment</h5>
+          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal4">
+          Change Password</button>
+          
+          <!-- Modal -->
+          <div class="modal fade" id="exampleModal4" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Change Password</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form method="POST" action="{% url 'change_password' %}">
+                    {% csrf_token %}
+    
+                    <div class="form-group mt-3">
+                      <label for="exampleInputEmail1">Enter Old Password</label>
+                      <input type="password" name="old_password" class="form-control form-control-sm">
+                    </div>
+                    <div class="form-group mt-3">
+                      <label for="exampleInputEmail1">Your new password</label>
+                      <input type="password" name="new_password" class="form-control form-control-sm">
+                    </div>
+                    <div class="form-group mt-3 mb-3">
+                      <label for="exampleInputEmail1">Repeat password</label>
+                      <input type="password" name="repeat_password" class="form-control form-control-sm">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block submit-btn">Confirm</button>
+                  </form>                
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+      /* cancel order */
+
+      function cancel_order(id){
+
+        var data = {
+      
+            'order_id' :id,
+            'csrf_token' : '{{csrf_token}}',
+      
+        }
+        swal({
+          title: "Are you sure?",
+          text: "Once Cancelled, you will not be able to retrive the order!",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+      
+      
+            $.ajax({
+              url:"{% url 'cancel_order' %}",
+              type:"POST",
+              data: data,
+                dataType: "html",
+                success: function () {
+                    $("#order_div_id").load(location.href + " #order_div_id");            
+          
+                }
+          
+            });
+            
+            swal("You cancelled your order!", {
+              icon: "success",
+            });
+          } else {
+            swal("Your order is safe!");
+          }
+        });
+      
+      
+      }
+</script>
+
+<!-- My Account Modal -->
+
+{% endblock %}

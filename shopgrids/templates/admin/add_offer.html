@@ -1,0 +1,87 @@
+{% extends 'admin/adminbase.html' %}
+
+
+{% block content %}
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<div class="main-content">
+
+    <div class="page-content">
+        <div class="container-fluid">
+            <!-- start page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                    <h4 class="mb-sm-0 font-size-18">Add Offer</h4>
+
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Offer Management</a></li>
+                            <li class="breadcrumb-item active">Add Offer</li>
+                        </ol>
+                    </div>
+
+                </div>
+            </div>
+                        <!-- end page title -->
+
+            <div class="row">
+                <div class="d-flex justify-content-center">
+
+                    <div class="tab-pane" id="seller-details">
+                        <div class="text-center mb-4">
+                            <h5>Add Offer</h5>
+                            <p class="card-title-desc">Fill all information below</p>
+                        </div>
+                        <div class="text-center mb-4">
+                            {% include 'includes/alert.html' %}
+                        </div>
+                        <form action="{% url 'add_offer' %}" method="POST" id="add_offer_form">
+                            {% csrf_token %}
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label for="basicpill-firstname-input" class="form-label">Offer Name</label>
+                                        <input type="text" name = "offer_name" class="form-control" id="offer_name_id">
+                                    </div>
+                                    <span class="error_form" id="offer_name_error_message"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="sales">Offer Percent</label>
+                                    <input id="offer_percent_id" name="offer_percent" type="number" class="form-control" onkeypress="return isNumber(event)" onpaste="return false;"
+                                    oninput = "javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength)" maxlength="3">
+                                    <span class="error_form" id="offer_percent_error_message"></span>
+
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label for="basicpill-address-input" class="form-label">Offer Expiry Date</label>
+                                        <input type="date" name = "offer_expiry_date" class="form-control" id="offer_expiry_date_id">
+                                    </div>
+                                    <span class="error_form" id="offer_expiry_error_message"></span>
+
+                                </div>
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label for="basicpill-address-input" class="form-label">Offer Expiry Time</label>
+                                        <input type="time" name = "offer_expiry_time" class="form-control" id="offer_expiry_time_id">
+                                    </div>
+                                    <span class="error_form" id="offer_time_error_message"></span>
+
+                                </div>
+
+                        <ul class="pager wizard twitter-bs-wizard-pager-link">
+                            <button type="submit" class="btn btn-primary">Submit </button>
+                        </ul>
+                    </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+</div>
+            
+
+{% endblock %}

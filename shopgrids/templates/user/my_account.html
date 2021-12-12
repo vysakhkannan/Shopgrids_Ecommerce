@@ -1,0 +1,94 @@
+{% extends 'user/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg">
+
+  <div class="container mt-5 mb-5">
+    <div class="row">
+    <aside class="col-md-3">
+      {% include 'user/my_account_base.html' %}
+    </aside>
+    <main class="col-md-9">
+      <h2 class="mt-1 mb-5">Your Account Details</h2>
+      {% include 'includes/alert.html' %}
+      <form method="POST" action="{% url 'change_account_details' %}">
+        {% csrf_token %}
+        <div class="form-row">
+          <div class="form-group col-md-9">
+            <label for="inputEmail4">First Name</label>
+            <input type="text" class="form-control" id="inputEmail4" name="first_name" value="{{current_user.first_name}}">
+          </div>
+          <div class="form-group col-md-9">
+            <label for="inputPassword4">Last name</label>
+            <input type="text" class="form-control" id="inputPassword4" name="last_name" value="{{current_user.last_name}}">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-9">
+            <label for="inputEmail4">Email</label>
+            <input type="email" class="form-control" id="inputEmail4" name="email" value="{{current_user.email}}" placeholder="Email">
+          </div>
+          <div class="form-group col-md-9">
+            <label for="inputPassword4">Username</label>
+            <input type="text" class="form-control" id="inputPassword4" name="username" value="{{current_user.username}}" placeholder="Password">
+          </div>
+        </div>
+        <div class="form-group col-md-9">
+          <label for="inputAddress">Phone Number</label>
+          <input type="number" class="form-control" id="inputAddress" name="phone_number" value="{{current_user.phone_number}}" placeholder="1234 Main St">
+        </div>
+        <div class="form-group col-md-9 mt-5 mb-5">
+          <button type="submit" class="btn btn-primary">Change Details</button>
+
+        </div>
+
+      </form>
+
+      <!-- change password -->
+
+      <div class="col-md-5">
+        <div class="card login-form">
+          <div class="card-body">
+            <h3 class="card-title text-center">Change password</h3>
+            
+            <!--Password must contain one lowercase letter, one number, and be at least 7 characters long.-->
+            
+            <div class="card-text">
+              <form method="POST" action="{% url 'change_password' %}">
+                {% csrf_token %}
+
+            </div>
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Enter Old Password</label>
+                  <input type="password" name="old_password" class="form-control form-control-sm">
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Your new password</label>
+                  <input type="password" name="new_password" class="form-control form-control-sm">
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Repeat password</label>
+                  <input type="password" name="repeat_password" class="form-control form-control-sm">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block submit-btn">Confirm</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div> <!-- row.// -->
+  </div>
+  
+  
+  </section>
+  <!-- ========================= SECTION CONTENT END// ========================= -->
+
+
+
+
+{% endblock %}
+
