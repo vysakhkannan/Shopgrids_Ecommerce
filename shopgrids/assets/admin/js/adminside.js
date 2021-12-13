@@ -20,6 +20,13 @@ document.getElementById('files').onchange = function () {
   }
 
 
+  document.getElementByClass('banner_image').onchange = function () {
+    var src = URL.createObjectURL(this.files[0])
+    alert(src)
+    document.getElementById('image0').src = src
+  }
+
+
 /* scripts for not allowing text in number field */
 
 
