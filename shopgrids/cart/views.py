@@ -566,6 +566,7 @@ def paypal_payment(request):
 
 
     data = {
+        
         'new_order_id' :new_order_id ,
         'transID' : transaction_id,
     }
