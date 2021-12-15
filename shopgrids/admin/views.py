@@ -30,8 +30,13 @@ def adminlogin(request):
             order_item_count +=1
 
         # Average 
+        try :
 
-        sales = total_sales / order_item_count
+            sales = total_sales / order_item_count
+
+        except:
+
+            pass
 
         average_sales = round(sales, 2)
 
