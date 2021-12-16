@@ -17,108 +17,141 @@ def adminlogin(request):
 
         total_sales = 0
         count = 0
-        for order in orders:
-            total_sales += order.grand_total
-            count +=1
+        try :
+            for order in orders:
+                total_sales += order.grand_total
+                count +=1
+
+        except:
+            count = 0
 
         # Order items
 
-        ordered_items = OrderItems.objects.all()
-        order_item_count = 0
+        try:
 
-        for ordered_item in ordered_items:
-            order_item_count +=1
+            ordered_items = OrderItems.objects.all()
+            order_item_count = 0
 
-        # Average 
-        try :
-
-            sales = total_sales / order_item_count
+            for ordered_item in ordered_items:
+                order_item_count +=1
 
         except:
 
-            pass
+            order_item_count = 0
 
-        average_sales = round(sales, 2)
+
+        # Average 
+
+        try:
+
+            sales = total_sales / order_item_count
+            average_sales = round(sales, 2)
+
+
+        except:
+            sales = 0
+
+
 
         # Delivered order
 
-        orders_delivered = Order.objects.filter(delivery_status = 'delivered')
-        delivered_item = 0
-        for delivered in orders_delivered:
-            delivered_item += 1
+        try:
 
+            orders_delivered = Order.objects.filter(delivery_status = 'delivered')
+            delivered_item = 0
+            for delivered in orders_delivered:
+                delivered_item += 1
+            
+        except:
+
+            delivered_item = 0
+
+        # try:
+
+
+        #     orders = Order.objects.distinct('payment_method')
+
+        # except:
+
+        #     pass
+
+        try:
+            cash_on_delivery = Order.objects.filter(payment_method = 'cash_on_delivery')
+            cod_total = 0
+            for cod in cash_on_delivery:
+                cod_total += cod.grand_total
+        except Order.DoesNotExist:
+
+            cod_total = 0
+
+        try:
+
+            razor_pay = Order.objects.filter(payment_method = 'razor_pay')
+            razor_total = 0
+            for razor in razor_pay:
+                razor_total += razor.grand_total
         
+        except Order.DoesNotExist:
 
-        orders = Order.objects.distinct('payment_method')
+            razor_total = 0
 
-        cash_on_delivery = Order.objects.filter(payment_method = 'cash_on_delivery')
-        cod_total = 0
-        for cod in cash_on_delivery:
-            cod_total += cod.grand_total
+        try:
 
-        razor_pay = Order.objects.filter(payment_method = 'razor_pay')
-        razor_total = 0
-        for razor in razor_pay:
-            razor_total += razor.grand_total
+            PayPal = Order.objects.filter(payment_method = 'PayPal')
+            paypal_total = 0
+            for paypal in PayPal:
+                paypal_total += paypal.grand_total
 
+        except Order.DoesNotExist:
 
-        PayPal = Order.objects.filter(payment_method = 'PayPal')
-        paypal_total = 0
-        for paypal in PayPal:
-            paypal_total += paypal.grand_total
+            paypal_total = 0
 
-        wallet_pay = Order.objects.filter(payment_method = 'wallet_pay')
-        wallet_total = 0
-        for wallet in wallet_pay:
-            wallet_total += wallet.grand_total
+        try:
 
-        
+            wallet_pay = Order.objects.filter(payment_method = 'wallet_pay')
+            wallet_total = 0
+            for wallet in wallet_pay:
+                wallet_total += wallet.grand_total
+
+        except Order.DoesNotExist:
+
+            wallet_pay = 0
+
         # Finding the sale graph based on category
 
-        order_items = OrderItems.objects.all()
-        categories = Category.objects.all()
+        try :
 
 
-        mobile_phones_count = 0
-        laptop_count = 0
-        for items in order_items:
+            categories = Category.objects.all()
+            items_ordered = OrderItems.objects.all()
 
+            category_dict = {}
+            category_price = {}
+            sale_price = 0
             for category in categories:
 
-                if items.products_id.category.category_name == 'mobile phones' :
+                # category = Category.objects.get(id = category_id)
 
-                    mobile_phones_count += items.sub_total
-                    
+                category_id = category.id
+                category_name = category.category_name
 
-                else:
+                for items in items_ordered:
 
-                    laptop_count += items.sub_total
+                    if items.products_id.category.id == category_id:
 
-
-        categories = Category.objects.all()
-        items_ordered = OrderItems.objects.all()
-
-        category_dict = {}
-        category_price = {}
-        sale_price = 0
-        for category in categories:
-
-            # category = Category.objects.get(id = category_id)
-
-            category_id = category.id
-            category_name = category.category_name
-
-            for items in items_ordered:
-
-                if items.products_id.category.id == category_id:
-
-                    sale_price += items.sub_total
+                        sale_price += items.sub_total
 
 
-            category_dict[category_name] = sale_price
-            category_price[sale_price] = category_name
+                category_dict[category_name] = sale_price
+                category_price[sale_price] = category_name
+
+        except:
+                sale_price = 0
+                category_name = 0
+                category_dict[category_name] = sale_price
+                category_price[sale_price] = category_name
     
-        
+  
         context = {
             'total_sales' : total_sales,
             'order_item_count' : order_item_count,
@@ -129,14 +162,11 @@ def adminlogin(request):
             'razor_total' : razor_total,
             'paypal_total' : paypal_total,
             'wallet_total' : wallet_total,
-            'mobile_phones_count' : mobile_phones_count,
-            'laptop_count' : laptop_count,
             'category_dict': category_dict,
             'category_price' : category_price
 
 
         }
-
 
 
         return render(request, 'admin/adminhome.html', context)
