@@ -49,7 +49,7 @@ def adminlogin(request):
 
 
         except:
-            sales = 0
+            average_sales = 0
 
 
 
