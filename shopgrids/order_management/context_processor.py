@@ -20,7 +20,6 @@ def offer_expiry(request):
 
     current_time = datetime_NY.strftime("%H:%M:%S")
 
-    print(current_time)
 
     offers = Offer.objects.filter(expiry_date__lte = today_date, expiry_time__lte = current_time)
 
@@ -150,7 +149,6 @@ def coupon_expiry(request):
 
     current_time = datetime_NY.strftime("%H:%M:%S")
 
-    print(current_time)
 
     coupon = Coupon.objects.filter(expiry_date__lte = today_date, expiry_time__lte = current_time)
 

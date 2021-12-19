@@ -37,7 +37,7 @@
   
     </div>
 
-    <div class="row">
+    <!-- <div class="row">
       <table class="table">
         <thead>
           <tr>
@@ -60,14 +60,98 @@
           </tr>
         </tbody>
       </table>
+    </div> -->
+
+    <div class="row justify-content-center">
+      <main class="col-md-10">
+
+        <article class="card mt-5 mb-5">
+        <header class="card-header">
+          <strong class="d-inline-block mr-3">Order ID: {{order_id}}</strong>
+          <br>
+          <span>Order Status: {{order_status}}</span>
+        </header>
+        <div class="card-body">
+          <div class="row"> 
+            <div class="col-md-8">
+              <h6 class="text-muted">Delivery to</h6>
+              <p>{{order_address}} <br>  
+                
+               </p>
+            </div>
+            <div class="col-md-4">
+              <h6 class="text-muted">Payment Method :</h6>
+  
+  
+  
+              <span class="text-success">
+                <i class="fab fa-lg fa-cc-visa"></i>
+                  {{payment_method}}
+              </span>
+              <p><br>
+               <span class="b">Grand Total: ₹ {{grand_total}} </span>
+              </p>
+            </div>
+          </div> <!-- row.// -->
+        </div> <!-- card-body .// -->
+        <div class="table-responsive">
+        <table class="table table-hover">
+  
+        {% for sub_order in sub_orders %}
+
+          {% for product in products %}
+
+
+            {% if sub_order.order.id == order_id_id %}
+
+
+              {% if product.id == sub_order.products_id.id %}
+
+              <tr>
+                <td width="65">
+                  <img src="{{product.product_cover.url}}" class="img-xs border">
+                </td>
+                <td> 
+                  <p class="title mb-0">{{product.product_name}} </p>
+                  <var class="price text-muted">INR {{product.sale_price}}</var>
+                </td>
+                <td> Quantity : {{sub_order.quantity}} </td>
+                <td width="250"> <a href="{% url 'single_product_view' product.id %}" class="btn btn-outline-primary">Details</a></td>
+              </tr>
+
+              {% endif %}
+
+            {% endif %}
+
+          {% endfor %}
+          
+        {% endfor %}
+            
+  
+  
+        </table>
+        </div> <!-- table-responsive .end// -->
+        </article> <!-- order-group.// --> 
+  
+      </main>
     </div>
     <div class="row text-center mt-5 mb-5">
 
-      <h3>You will be automatically redirected to Home page in 5 sec.....</h3>
+      <h3>You will be automatically redirected to Home page in 10 sec.....</h3>
 
     </div>
     <div class="row text-center mt-5 mb-5">
-      <a href="{% url 'home' %}"><button type="button" class="btn btn-primary">Home</button></a>
+      <div class="col-12">
+        <a href="{% url 'home' %}"><button type="button" class="btn btn-primary">Home</button></a>
+        &nbsp;
+        &nbsp;
+        <a href="{% url 'my_orders' %}"><button type="button" class="btn btn-primary">My Order's</button></a>
+
+
+      </div>
+   
+
+
 
     </div>
 </div>
@@ -75,7 +159,7 @@
 <script>
   setTimeout(function(){
     window.location.href = "{% url 'home' %}";
- }, 5000);
+ }, 10000);
 </script>
 
 {% endblock %}

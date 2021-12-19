@@ -7,37 +7,20 @@
 <section class="section-conten padding-y bg">
 
   <div id = "ordered_items" class="container mt-5 mb-5">
-    <div class="row">
-    <aside class="col-md-3">
-      {% include 'user/my_account_base.html' %}
-    </aside>
-    <main class="col-md-9">
+    <div class="row d-flex justify-content-center">
+
+    <main class="col-md-10 text-center">
         <h2 class="">Your Addresses</h2>
 
-        <div class="table-responsive">
+        <div class="table-responsive mt-5 mb-5">
           <!--Table-->
           <table class="table table-striped">
         
-            <!--Table head-->
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Surname</th>
-                <th>Country</th>
-                <th>City</th>
-                <th>Position</th>
-                <th>Age</th>
-              </tr>
-            </thead>
-            <!--Table head-->
         
-            <!--Table body-->
+        
             <tbody>
               <tr>
-                <th scope="row">1</th>
-                <td>First Name</td>
-                <td>Last Name</td>
+
                 <td>Address</td>
                 <td>Phone Number</td>
                 <td>Email</td>
@@ -51,17 +34,11 @@
               {% for user_address in user_addresses %}
 
               <tr>
-                <td>{{user_address.first_name}}</td>
-                <td>{{user_address.last_name}}</td>
-                <td> {{user_address.address}}<br>
-                  {{user_address.city}}<br>
-                  {{user_address.state}}, {{user_address.post_code}}<br>
-                  {{user_address.country}}<br>
-                  Phone Number : {{add.phone_number}}
-                </address>  </td>
 
-                <td>{{user_address.phone_number}}</td>
-                <td>{{user_address.email}}</td>
+                <td>{{ user_address.address }}</td>
+
+                <td>{{ user_address.phone_number }}</td>
+                <td>{{ user_address.email }}</td>
 
                 <td>{{user_address.city}}</td>
                 <td>{{user_address.post_code}}</td>
@@ -72,7 +49,6 @@
               </tr>
               {% endfor %}
             </tbody>
-            Table body
           </table>
           <!--Table-->
         </div>

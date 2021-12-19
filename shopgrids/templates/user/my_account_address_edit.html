@@ -4,92 +4,108 @@
 {% block content %}
 
 <!-- ========================= SECTION CONTENT ========================= -->
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <section class="section-conten padding-y bg">
 
   <div id = "ordered_items" class="container mt-5 mb-5">
-    <div class="row">
-    <aside class="col-md-3">
-      {% include 'user/my_account_base.html' %}
-    </aside>
-    <main class="col-md-9">
+    <div class="row d-flex justify-content-center">
+    <main class="col-md-10">
         <div class="card mb-4">
             <div class="card-header py-3">
               <h5 class="mb-0">EDIT ADDRESS</h5>
             </div>
             <div class="card-body">
-              <form action = "" method = "POST">
-                  {% csrf_token %}
-                <!-- 2 column grid layout with text inputs for the first and last names -->
-                <div class="row mb-4">
-                  <div class="col">
-                    <div class="form-outline">
-                      <input type="text" id="form7Example1" class="form-control" name="first_name" value="{{address.first_name}}"/>
-                      <label class="form-label" for="form7Example1">First name</label>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-outline">
-                      <input type="text" id="form7Example2" class="form-control" name="last_name" value="{{address.last_name}}"/>
-                      <label class="form-label" for="form7Example2">Last name</label>
-                    </div>
+              <form action = "{% url 'my_account_address_edit' address.user.id %}" method = "POST">
+                {% csrf_token %}
+              <!-- 2 column grid layout with text inputs for the first and last names -->
+              <div class="row mb-4">
+                <div class="col">
+                  <div class="form-outline">
+                    <input type="text" id="form7Example1" class="form-control" name="first_name" value="{{address.first_name}}"/>
+                    <label class="form-label" for="form7Example1">First name</label>
+                    <span class="error_form" id="first_name_error_message"></span>
+
                   </div>
                 </div>
-      
-                <!-- Text input -->
-                <div class="form-outline mb-4">
-                  <input type="email" id="form7Example3" class="form-control" name="email" value="{{address.email}}"/>
-                  <label class="form-label" for="form7Example3">Email</label>
-                </div>
-      
-                <!-- Text input -->
-                <div class="form-outline mb-4">
-                  <input type="text" id="form7Example4" class="form-control" name="phone_number" value="{{address.phone_number}}"/>
-                  <label class="form-label" for="form7Example4">Phone Number</label>
-                </div>
-      
-                <!-- Email input -->
-                <div class="form-outline mb-4">
-                  <input type="text" id="form7Example5" class="form-control" name="address" value="{{address.address}}"/>
-                  <label class="form-label" for="form7Example5">Address</label>
-                </div>
-      
-                <!-- Number input -->
-                <div class="form-outline mb-4">
-                    <input type="text" id="form7Example6" class="form-control" name="country" value="{{address.country}}"/>
-                    <label class="form-label" for="form7Example6">Country</label>
+                <div class="col">
+                  <div class="form-outline">
+                    <input type="text" id="form7Example2" class="form-control" name="last_name" value="{{address.last_name}}"/>
+                    <label class="form-label" for="form7Example2">Last name</label>
+                    <span class="error_form" id="last_name_error_message"></span>
+
                   </div>
-                <!-- Number input -->
-                <div class="form-outline mb-4">
-                    <input type="text" id="form7Example6" class="form-control" name="city" value="{{address.city}}"/>
-                    <label class="form-label" for="form7Example6">City</label>
-                  </div>
-                <!-- Number input -->
-                <div class="form-outline mb-4">
-                    <input type="number" id="form7Example6" class="form-control" name="post_code" value="{{address.post_code}}"/>
-                    <label class="form-label" for="form7Example6">Post Code</label>
-                  </div>
-      
-                <!-- Message input -->
-                <div class="form-outline mb-4">
-                        <label>Region/State</label>
-                        <div class="select-items">
-                          <select class="form-control" name = "state">
-                            <option value="{{address.state}}">{{address.state}}</option>
-                            <option value="kerala">Kerala</option>
-                            <option value="tamilnadu">TamilNadu</option>
-                            <option value="karnataka">Karnataka</option>
-                            <option value="Goa">Goa</option>
-                            <option value="Maharashtra">Maharashtra</option>
-                          </select>
-                        </div>
                 </div>
-      
-                <!-- Checkbox -->
-                <div class="form-check d-flex justify-content-center mb-2">
-                    <button type="submit" class="btn btn-primary">Change</button>
+              </div>
+    
+              <!-- Text input -->
+              <div class="form-outline mb-4">
+                <input type="email" id="form7Example3" class="form-control" name="email" value="{{address.email}}"/>
+                <label class="form-label" for="form7Example3">Email</label>
+                <span class="error_form" id="email_error_message"></span>
+
+              </div>
+    
+              <!-- Text input -->
+              <div class="form-outline mb-4">
+                <input type="text" id="form7Example4" class="form-control" name="phone_number" value="{{address.phone_number}}"/>
+                <label class="form-label" for="form7Example4">Phone Number</label>
+                <span class="error_form" id="phone_number_error_message"></span>
+
+              </div>
+    
+              <!-- Email input -->
+              <div class="form-outline mb-4">
+                <input type="text" id="form7Example5" class="form-control" name="address" value="{{address.address}}"/>
+                <label class="form-label" for="form7Example5">Address</label>
+                <span class="error_form" id="product_name_error_message"></span>
+
+              </div>
+    
+              <!-- Number input -->
+              <div class="form-outline mb-4">
+                  <input type="text" id="form7Example6" class="form-control" name="country" value="{{address.country}}"/>
+                  <label class="form-label" for="form7Example6">Country</label>
+                  <span class="error_form" id="product_name_error_message"></span>
 
                 </div>
-              </form>
+              <!-- Number input -->
+              <div class="form-outline mb-4">
+                  <input type="text" id="form7Example6" class="form-control" name="city" value="{{address.city}}"/>
+                  <label class="form-label" for="form7Example6">City</label>
+                  <span class="error_form" id="product_name_error_message"></span>
+
+                </div>
+              <!-- Number input -->
+              <div class="form-outline mb-4">
+                  <input type="number" id="form7Example6" class="form-control" name="post_code" value="{{address.post_code}}"/>
+                  <label class="form-label" for="form7Example6">Post Code</label>
+                  <span class="error_form" id="product_name_error_message"></span>
+
+                </div>
+    
+              <!-- Message input -->
+              <div class="form-outline mb-4">
+                      <label>Region/State</label>
+                      <div class="select-items">
+                        <select class="form-control" name = "state">
+                          <option value="{{address.state}}">{{address.state}}</option>
+                          <option value="kerala">Kerala</option>
+                          <option value="tamilnadu">TamilNadu</option>
+                          <option value="karnataka">Karnataka</option>
+                          <option value="Goa">Goa</option>
+                          <option value="Maharashtra">Maharashtra</option>
+                        </select>
+                      </div>
+              </div>
+    
+              <!-- Checkbox -->
+              <div class="form-check d-flex justify-content-center mb-2">
+                  <button type="submit" class="btn btn-primary">Change</button>
+
+              </div>
+            </form>
             </div>
           </div>
 
@@ -100,11 +116,241 @@
   
   </section>
   <!-- ========================= SECTION CONTENT END// ========================= -->
-  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <!-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> -->
 
 
 
   <script>
+
+    //   edit address validation
+
+
+
+    $(function(){
+
+      $("#first_name_error_message").hide();
+      $("#last_name_error_message").hide();
+      $("#email_error_message").hide();
+      $("#phone_number_error_message").hide();
+      $("#address_error_message").hide();
+      $("#city_error_message").hide();
+      $("#post_code_error_message").hide();
+      $("#country_error_message").hide();
+      $("#state_error_message").hide();
+
+      
+
+
+  
+      var error_firstname = false;
+      var error_lastname = false;
+      var error_email = false;
+      var error_phone_number = false;
+      var error_address = false;
+      var error_city = false;
+      var error_post_code = false;
+      var error_country = false;
+      var error_state = false;
+
+
+  
+  
+      $("#user_first_name").focusout(function(){
+         check_firstname();
+       });
+       $("#user_last_name").focusout(function() {
+         check_lastname();
+       });
+       $("#user_email").focusout(function(){
+         check_email();
+      });
+      $("#user_phone_number").focusout(function() {
+         check_phone_number();
+      });
+      $("#user_address").focusout(function(){
+         check_address();
+      });
+      $("#user_city").focusout(function() {
+         check_city();
+      });
+      $("#user_post_code").focusout(function(){
+         check_post_code();
+      });
+
+      $("#user_country").focusout(function(){
+         check_country();
+      });
+      $("#user_state").focusout(function(){
+         check_state();
+      });
+
+
+
+      function check_firstname() {
+         var pattern = /^[a-zA-Z]*$/;
+         var fname = $("#user_first_name").val();
+         alert(fname)
+         if (pattern.test(fname) || fname !== '') {
+            $("#first_name_error_message").hide();
+            $("#user_first_name").css("border-bottom","2px solid #34F458");
+         } else {
+            $("#first_name_error_message").html("Should contain only Characters").css("color","#F90A0A");
+            $("#first_name_error_message").show();
+            $("#user_first_name").css("border-bottom","2px solid #F90A0A");
+            error_firstname = true;
+         }
+      }
+      function check_lastname() {
+         var pattern = /^[a-zA-Z]*$/;
+         var fname = $("#user_last_name").val();
+         alert(fname)
+         if (pattern.test(fname) || fname !== '') {
+            $("#last_name_error_message").hide();
+            $("#user_last_name").css("border-bottom","2px solid #34F458");
+         } else {
+            $("#last_name_error_message").html("Should contain only Characters").css("color","#F90A0A");;
+            $("#last_name_error_message").show();
+            $("#user_last_name").css("border-bottom","2px solid #F90A0A");
+            error_lastname = true;
+         }
+      }
+      function check_email() {
+         var pattern = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+         var email = $("#user_email").val();
+         if (pattern.test(email) && email !== '') {
+            $("#email_error_message").hide();
+            $("#user_email").css("border-bottom","2px solid #34F458");
+         } else {
+            $("#email_error_message").html("Invalid Email").css("color","#F90A0A");;
+            $("#email_error_message").show();
+            $("#user_email").css("border-bottom","2px solid #F90A0A");
+            error_email = true;
+         }
+      }
+      function check_phone_number() {
+         var pattern = /[0-9]/g;
+         var phone = $("#user_phone_number").val();
+         if (pattern.test(phone) && phone !== '' && phone.length == 10) {
+            $("#phone_number_error_message").hide();
+            $("#user_phone_number").css("border-bottom","2px solid #34F458");
+         } else {
+            $("#phone_number_error_message").html("The phone number must have 10 digit").css("color","#F90A0A");;
+            $("#phone_number_error_message").show();
+            $("#user_phone_number").css("border-bottom","2px solid #F90A0A");
+            error_phone_number = true;
+         }
+      }
+
+  
+       function check_address() {
+          var address = $("#user_address").val();
+          if (address.length < 10) {
+
+             $("#address_error_message").html("Should atleast contain 12 Characters").css("color","#F90A0A");
+             $("#address_error_message").show();
+             $("#user_address").css("border-bottom","2px solid #F90A0A");
+             error_address = true;
+          } else {
+             $("#address_error_message").hide();
+             $("#user_address").css("border-bottom","2px solid #34F458");
+
+          }
+          
+       }
+  
+       function check_city() {
+          var city = $("#user_city").val().length;
+          if (city < 3 ) {
+             $("#city_error_message").html("Atleast 3 Characters").css("color","#F90A0A");;
+             $("#city_error_message").show();
+             $("#user_city").css("border-bottom","2px solid #F90A0A");
+             error_city = true;
+          } else {
+             $("#city_error_message").hide();
+             $("#user_city").css("border-bottom","2px solid #34F458");
+          }
+       }
+
+       function check_post_code() {
+         var pattern = /[0-9]/g;
+         var post_code = $("#user_post_code").val();
+         if (pattern.test(post_code) && post_code.length == 6 && post_code.length != 0 ) {
+            $("#post_code_error_message").hide();
+            $("#user_post_code").css("border-bottom","2px solid #34F458");
+         } else {
+            $("#post_code_error_message").html("Post-code must contain 6 digit").css("color","#F90A0A");;
+            $("#post_code_error_message").show();
+            $("#user_post_code").css("border-bottom","2px solid #F90A0A");
+            error_post_code = true;
+         }
+      }
+
+      function check_country() {
+         var pattern = /^[a-zA-Z]*$/;
+         var country = $("#user_country").val();
+         if (pattern.test(country) && country !== '') {
+            $("#country_error_message").hide();
+            $("#user_country").css("border-bottom","2px solid #34F458");
+         } else {
+            $("#country_error_message").html("Should contain only Characters").css("color","#F90A0A");;
+            $("#country_error_message").show();
+            $("#user_country").css("border-bottom","2px solid #F90A0A");
+            error_country = true;
+         }
+      }
+
+      function check_state() {
+         var country = $("#user_state").val();
+         if (country !== '') {
+            $("#state_error_message").hide();
+            $("#user_state").css("border-bottom","2px solid #34F458");
+         } else {
+            $("#state_error_message").html("Please select your state").css("color","#F90A0A");;
+            $("#state_error_message").show();
+            $("#user_state").css("border-bottom","2px solid #F90A0A");
+            error_state = true;
+         }
+      }
+      
+       $("#address_edit_form_id").submit(function() {
+
+         error_firstname = false;
+         error_lastname = false;
+         error_email = false;
+         error_phone_number = false;
+         error_address = false;
+         error_city = false;
+         error_post_code = false;
+         error_country = false;
+         error_state = false;
+
+
+      
+  
+          check_firstname();
+          check_lastname();
+          check_phone_number();
+          check_email();
+          check_address();
+          check_city();
+          check_post_code();
+          check_country()
+          check_state()
+
+
+
+
+  
+          if (error_firstname == false && error_lastname == false && error_email == false && error_phone_number == false && error_address == false && error_city == false && error_post_code == false && error_country == false && error_state == false) {
+             return true;
+          } else {
+            Swal.fire('Fill the fields correctly')
+            return false;
+          }
+  
+  
+       });
+  })
 
     /* cancel order 
 

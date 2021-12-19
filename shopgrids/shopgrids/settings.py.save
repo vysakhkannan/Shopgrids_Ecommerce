@@ -32,7 +32,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*'
+]
 
 
 # Application definition
@@ -82,8 +83,6 @@ TEMPLATES = [
                 'order_management.context_processor.coupon_expiry',
                 'cart.context_processor.wishlist_counter',
                 'cart.context_processor.saved_amount',
-                'cart.context_processor.guest_counter',
-
 
 
             ],

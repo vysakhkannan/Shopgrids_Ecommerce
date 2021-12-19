@@ -13,7 +13,18 @@ urlpatterns = [
     path('cancel_order/', views.cancel_order, name="cancel_order"),
     path('my_address/', views.my_address, name='my_address'),
     path('my_account_address_edit/<int:id>', views.my_account_address_edit, name='my_account_address_edit'),
-    path('delete_address/', views.delete_address, name='delete_address')
+    path('delete_address/', views.delete_address, name='delete_address'),
+    path('my_orders/', views.my_orders, name='my_orders'),
+    path('my_address/', views.my_address, name='my_address'),
+    path('change_password/', views.change_password, name='change_password'),
+
+
+    
+
+
+
+
+    
 
 
 

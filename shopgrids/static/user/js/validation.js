@@ -82,7 +82,7 @@ $(function(){
             check_fpassword();
  
     
-            if (error_fusername === false && error_fusername === false) {
+            if (error_fusername === false && error_fpassword === false) {
                return true;
             } else {
                Swal.fire('Fill the fields correctly')
@@ -331,7 +331,7 @@ function isNumber(evt) {
          var error_city = false;
          var error_post_code = false;
          var error_country = false;
-         var error_error = false;
+         var error_state = false;
 
    
      
@@ -539,3 +539,161 @@ function isNumber(evt) {
       }
       return true;
   }
+
+
+  // Details upload validation
+
+
+  function isText(evt) {
+   evt = (evt) ? evt : window.event;
+   var charCode = (evt.which) ? evt.which : evt.keyCode;
+   if ( (  charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 12 )) {
+       return false;
+   }
+   return true;
+}
+
+
+  $(function(){
+
+   $("#first_name_error_message").hide();
+   $("#last_name_error_message").hide();
+   $("#user_email_error_message").hide();
+   $("#username_error_message").hide();
+   $("#phone_error_message").hide();
+
+
+   var error_firstname = false;
+   var error_lastname = false;
+   var error_email = false;
+   var error_username = false;
+   var error_phonenumber = false;
+
+
+
+   $("#first_name_id").focusout(function(){
+      check_firstname();
+    });
+    $("#last_name_id").focusout(function() {
+      check_lastname();
+    });
+    $("#user_email_id").focusout(function(){
+      check_email();
+   });
+   $("#username_id").focusout(function() {
+      check_username();
+   });
+   $("#phone_number_id").focusout(function(){
+      check_phone_number();
+   });
+
+   function check_firstname() {
+      var pattern = /^[a-zA-Z]*$/;
+      var fname = $("#first_name_id").val();
+      if (pattern.test(fname) && fname !== '') {
+         $("#first_name_error_message").hide();
+         $("#id_first_name").css("border-bottom","2px solid #34F458");
+      } else {
+         $("#first_name_error_message").html("Should contain only Characters").css("color","#F90A0A");
+         $("#first_name_error_message").show();
+         $("#id_first_name").css("border-bottom","2px solid #F90A0A");
+         error_firstname = true;
+      }
+   }
+   function check_lastname() {
+      var pattern = /^[a-zA-Z]*$/;
+      var fname = $("#last_name_id").val();
+      if (pattern.test(fname) && fname !== '') {
+         $("#last_name_error_message").hide();
+         $("#id_last_name").css("border-bottom","2px solid #34F458");
+      } else {
+         $("#last_name_error_message").html("Should contain only Characters").css("color","#F90A0A");;
+         $("#last_name_error_message").show();
+         $("#id_last_name").css("border-bottom","2px solid #F90A0A");
+         error_lastname = true;
+      }
+   }
+   function check_email() {
+      var pattern = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+      var email = $("#user_email_id").val();
+      if (pattern.test(email) && email !== '') {
+         $("#user_email_error_message").hide();
+         $("#id_email").css("border-bottom","2px solid #34F458");
+      } else {
+         $("#user_email_error_message").html("Invalid Email").css("color","#F90A0A");;
+         $("#user_email_error_message").show();
+         $("#id_email").css("border-bottom","2px solid #F90A0A");
+         error_email = true;
+      }
+   }
+   function check_phone_number() {
+      var pattern = /[0-9]/g;
+      var phone = $("#phone_number_id").val();
+      if (pattern.test(phone) && phone !== '' && phone.length == 10) {
+         $("#phone_error_message").hide();
+         $("#id_phone_number").css("border-bottom","2px solid #34F458");
+      } else {
+         $("#phone_error_message").html("Invalid phone number").css("color","#F90A0A");;
+         $("#phone_error_message").show();
+         $("#id_phone_number").css("border-bottom","2px solid #F90A0A");
+         error_phonenumber = true;
+      }
+   }
+
+
+    function check_username() {
+       var pattern = /^[a-zA-Z0-9]+$/;
+       var fusername = $("#username_id").val();
+       if ( fusername.length = 0 || fusername.length < 5 ) {
+
+          $("#username_error_message").html("Should atleast contain 5 Characters").css("color","#F90A0A");;
+          $("#username_error_message").show();
+          $("#id_username").css("border-bottom","2px solid #F90A0A");
+          error_username = true;
+       } else {
+          $("#username_error_message").hide();
+          $("#id_username").css("border-bottom","2px solid #34F458");
+
+       }
+       
+       
+       
+       if (pattern.test(fusername) && fusername !== '') {
+          $("#username_error_message").hide();
+          $("#id_username").css("border-bottom","2px solid #34F458");
+       } else {
+          $("#username_error_message").html("Should contain only Characters").css("color","#F90A0A");;
+          $("#username_error_message").show();
+          $("#id_username").css("border-bottom","2px solid #F90A0A");
+          error_fusername = true;
+       }
+    }
+   
+    $("#edit_user_details_form_id").submit(function() {
+       error_username = false;
+       error_password = false;
+       error_firstname = false;
+       error_email = false;
+       error_phonenumber = false;
+
+
+       check_firstname();
+       check_lastname();
+       check_phone_number();
+       check_email();
+       check_username();
+
+
+
+       if (error_username == false && error_firstname == false && error_phonenumber == false && error_email == false && error_lastname == false) {
+          return true;
+       } else {
+         Swal.fire('Fill the fields correctly')
+         return false;
+       }
+
+
+    });
+})
+
+

@@ -225,7 +225,7 @@
                 </section>
             </li>
             <!-- form starts -->
-            <form action="{% url 'place_order' %}" method="POST" id="checkout_form">
+            <form action="{% url 'place_order' id product_id %}" method="POST" id="checkout_form">
               {% csrf_token %}
 
             <li>
@@ -502,6 +502,8 @@ var csrftoken = getCookie('csrftoken');
 var payment_methods = "PayPal"
 var redirecting_url = "{% url 'paypal_payment_success' %}"
 var error_redirecting_url = "{% url 'payment_error' %}"
+var id = '{{id}}'
+var prd_id = '{{product_id}}'
 
 
 
@@ -535,8 +537,7 @@ var error_redirecting_url = "{% url 'payment_error' %}"
 
                 var amount = document.getElementById('grand_total_hidden_field').value
                 var address_id = document.querySelector('.mailing_address_checked:checked').value;
-                alert(address_id)
-                alert(typeof(address_id))
+          
 
 
                 fetch(url, {
@@ -552,6 +553,8 @@ var error_redirecting_url = "{% url 'payment_error' %}"
                     status : orderData.status,
                     address_id : address_id,
                     grand_total :  amount,
+                    id : id,
+                    prd_id : prd_id
                   }),
                 })
                 .then(response => response.json())

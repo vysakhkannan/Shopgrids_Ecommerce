@@ -46,6 +46,52 @@
 
     <style>
 
+        /* Style The Dropdown Button */
+        .dropbtn {
+          background-color : transparent;
+          color: white;
+          font-size: 16px;
+          border: none;
+          cursor: pointer;
+        }
+        
+        /* The container <div> - needed to position the dropdown content */
+        .dropdown {
+          position: relative;
+          display: inline-block;
+        }
+        
+        /* Dropdown Content (Hidden by Default) */
+        .dropdown-content {
+          display: none;
+          position: absolute;
+          background-color: #081828;
+          min-width: 160px;
+          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+          z-index: 1;
+        }
+        
+        /* Links inside the dropdown */
+        .dropdown-content a {
+          color: black;
+          padding: 12px 16px;
+          text-decoration: none;
+          display: block;
+        }
+        
+        /* Change color of dropdown links on hover */
+        .dropdown-content a:hover {background-color: #f1f1f1}
+        
+        /* Show the dropdown menu on hover */
+        .dropdown:hover .dropdown-content {
+          display: block;
+        }
+        
+        /* Change the background color of the dropdown button when the dropdown content is shown */
+        .dropdown:hover .dropbtn {
+          background-color: transparent;
+        }
+
       
       .thumbnail{
         object-fit: cover;
@@ -179,7 +225,7 @@
     <header class="header navbar-area">
       <div class="topbar">
         <div class="container">
-          <div class="row align-items-center">
+          <div class="row d-flex justify-content-between">
             <div class="col-lg-4 col-md-4 col-12">
               <div class="top-left">
                 <div class="menu-top-link">
@@ -199,7 +245,7 @@
                 </ul>
               </div>
             </div>
-            <div class="col-lg-4 col-md-4 col-12">
+            <div class="col-lg-4 col-md-4 col-12 flex-row-reverse bd-highlight">
               <div class="top-end">
                 {% if user.id is None %}
                 <div class="user">
@@ -215,17 +261,38 @@
                   </li>
                 </ul>
                 {% else %}
-                <div class="user">
-                  <i class="lni lni-user"></i>
-                  Hello <span style="text-transform: capitalize;">{{user.first_name}}</span>  
-                </div>
+
                 <ul class="user-login">
-                  <li>
+                  <!-- <li>
                     <a href="{% url 'my_account' %}">My Account</a>
+
+                  </li> -->
+                  <li>
+                    <i class="lni lni-user"></i>
+                    Hello <span style="text-transform: capitalize;">{{user.first_name}}
+                    </span> 
+
 
                   </li>
                   <li>
-                    <a href="{% url 'logout' %}">Logout</a>
+                    <div class="dropdown">
+                      <button class="dropbtn">                
+                        <i class="lni lni-user-settings
+                        "></i>
+                         <span style="text-transform: capitalize;">Account Settings &nbsp <i class="lni lni-chevron-down"></i>
+                        </span> 
+                        
+                      </button>
+                      <div class="dropdown-content">
+                        <a href="{% url 'my_account' %}">Profile</a>
+                        <a href="{% url 'my_orders' %}">Orders</a>
+                        <a href="{% url 'my_address' %}">Address</a>
+                        <a href="{% url 'change_password' %}">Change Password</a>
+                        <a href="{% url 'logout' %}">Logout</a>
+
+
+                      </div>
+                    </div>
                   </li>
 
                 </ul>
@@ -297,7 +364,12 @@
                   <div class="cart-items" id = "cart_main_div_id">
                     <a href="{% url 'view_cart' %}" class="main-btn">
                       <i class="lni lni-cart"></i>
+                      {% if user.first_name is not None %}
                       <span id="cart_count_id" class="total-items">{{cart_count}}</span>
+                      {% else %}
+                      <span id="cart_count_id" class="total-items">{{guest_cart_count}}</span>
+
+                      {% endif %}
                     </a>
                   </div>
                 </div>

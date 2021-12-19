@@ -8,24 +8,11 @@ def counter(request):
         if 'adminlogin' in request.path:
             return {}
 
-        # elif request.session['guest_user']:
-
-        #     try:
-
-        #         guest_id = request.session['guest_user']
-        #         print(guest_id)
-        #         cart_items = CartItems.objects.filter(anonymous_user = guest_id, buy_now = False)
-        #         for items in cart_items:
-        #             cart_counter += items.quantity
-        #     except CartItems.DoesNotExist:
-        #         cart_counter = 0
-        #     return dict(cart_count = cart_counter)
-
 
         else:
             
             try:
-
+                
                 user_id = request.user.id
                 current_user = Accounts.objects.get(id = user_id)
                 cart_items = CartItems.objects.filter(user = current_user, buy_now = False)
@@ -35,9 +22,6 @@ def counter(request):
                 cart_counter = 0
             return dict(cart_count = cart_counter)
 
-        # else:
-
-        #     return dict(cart_count = '0')
 
     except:
         
@@ -53,7 +37,6 @@ def wishlist_counter(request):
         else:
             
             try:
-
                 user_id = request.user.id
                 current_user = Accounts.objects.get(id = user_id)
                 wishlist_items = Wishlist.objects.filter(user = current_user)
@@ -120,26 +103,27 @@ def saved_amount(request):
         
         return dict(real_saved_price = '0')
 
-# def delete_buy_now(request):
-#     try:
-#         if 'adminlogin' in request.path:
-#             return {}
 
-#         else:
+def guest_counter(request):
+    cart_counter = 0
+    try:
+        if 'adminlogin' in request.path:
+            return {}
+
+
+        else:
             
-#             try:
+            try:
+                if request.session['guest_user']:
+                    guest_id = request.session['guest_user']
+                    cart_items = CartItems.objects.filter(anonymous_user = guest_id, buy_now = False)
+                    for items in cart_items:
+                        cart_counter += items.quantity
+            except CartItems.DoesNotExist:
+                cart_counter = 0
+            return dict(guest_cart_count = cart_counter)
 
-#                 user_id = request.user.id
-#                 current_user = Accounts.objects.get(id = user_id)
-#                 cart_items = CartItems.objects.filter(user = current_user, buy_now = True)
-#                 for items in cart_items:
-#                     items.delete()
-#             except CartItems.DoesNotExist:
-                
-#                 return {}
 
-#             return {}
-
-#     except:
+    except:
         
-#         return {}
+        return dict(guest_cart_count = '0')
