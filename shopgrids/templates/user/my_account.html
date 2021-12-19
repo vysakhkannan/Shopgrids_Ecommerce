@@ -4,91 +4,305 @@
 {% block content %}
 
 <!-- ========================= SECTION CONTENT ========================= -->
+
+<style>
+  .profile-pic-wrapper {
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .pic-holder {
+    text-align: center;
+    position: relative;
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .pic-holder .pic {
+    height: 100%;
+    width: 100%;
+    -o-object-fit: cover;
+    object-fit: cover;
+    -o-object-position: center;
+    object-position: center;
+  }
+  
+  .pic-holder .upload-file-block,
+  .pic-holder .upload-loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(90, 92, 105, 0.7);
+    color: #f8f9fc;
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  
+  .pic-holder .upload-file-block {
+    cursor: pointer;
+  }
+  
+  .pic-holder:hover .upload-file-block {
+    opacity: 1;
+  }
+  
+  .pic-holder.uploadInProgress .upload-file-block {
+    display: none;
+  }
+  
+  .pic-holder.uploadInProgress .upload-loader {
+    opacity: 1;
+  }
+  
+  /* Snackbar css */
+  .snackbar {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    bottom: 30px;
+    font-size: 14px;
+    transform: translateX(-50%);
+  }
+  
+  .snackbar.show {
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  }
+  
+  @-webkit-keyframes fadein {
+    from {
+      bottom: 0;
+      opacity: 0;
+    }
+    to {
+      bottom: 30px;
+      opacity: 1;
+    }
+  }
+  
+  @keyframes fadein {
+    from {
+      bottom: 0;
+      opacity: 0;
+    }
+    to {
+      bottom: 30px;
+      opacity: 1;
+    }
+  }
+  
+  @-webkit-keyframes fadeout {
+    from {
+      bottom: 30px;
+      opacity: 1;
+    }
+    to {
+      bottom: 0;
+      opacity: 0;
+    }
+  }
+  
+  @keyframes fadeout {
+    from {
+      bottom: 30px;
+      opacity: 1;
+    }
+    to {
+      bottom: 0;
+      opacity: 0;
+    }
+  }
+  
+</style>
 <section class="section-conten padding-y bg">
 
-  <div class="container mt-5 mb-5">
-    <div class="row">
-    <aside class="col-md-3">
-      {% include 'user/my_account_base.html' %}
-    </aside>
-    <main class="col-md-9">
-      <h2 class="mt-1 mb-5">Your Account Details</h2>
-      {% include 'includes/alert.html' %}
-      <form method="POST" action="{% url 'change_account_details' %}">
-        {% csrf_token %}
-        <div class="form-row">
-          <div class="form-group col-md-9">
-            <label for="inputEmail4">First Name</label>
-            <input type="text" class="form-control" id="inputEmail4" name="first_name" value="{{current_user.first_name}}">
-          </div>
-          <div class="form-group col-md-9">
-            <label for="inputPassword4">Last name</label>
-            <input type="text" class="form-control" id="inputPassword4" name="last_name" value="{{current_user.last_name}}">
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group col-md-9">
-            <label for="inputEmail4">Email</label>
-            <input type="email" class="form-control" id="inputEmail4" name="email" value="{{current_user.email}}" placeholder="Email">
-          </div>
-          <div class="form-group col-md-9">
-            <label for="inputPassword4">Username</label>
-            <input type="text" class="form-control" id="inputPassword4" name="username" value="{{current_user.username}}" placeholder="Password">
-          </div>
-        </div>
-        <div class="form-group col-md-9">
-          <label for="inputAddress">Phone Number</label>
-          <input type="number" class="form-control" id="inputAddress" name="phone_number" value="{{current_user.phone_number}}" placeholder="1234 Main St">
-        </div>
-        <div class="form-group col-md-9 mt-5 mb-5">
-          <button type="submit" class="btn btn-primary">Change Details</button>
-
-        </div>
-
-      </form>
-
-      <!-- change password -->
-
-      <div class="col-md-5">
-        <div class="card login-form">
-          <div class="card-body">
-            <h3 class="card-title text-center">Change password</h3>
-            
-            <!--Password must contain one lowercase letter, one number, and be at least 7 characters long.-->
-            
-            <div class="card-text">
-              <form method="POST" action="{% url 'change_password' %}">
-                {% csrf_token %}
-
-            </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Enter Old Password</label>
-                  <input type="password" name="old_password" class="form-control form-control-sm">
+  <section style="background-color: #eee;">
+    <div class="container py-5">
+      <div class="row">
+          {% include 'includes/alert.html' %}
+      </div>
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="card mb-4">
+            <div class="card-body text-center">
+              <!-- <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.png" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;"> -->
+              <div class="profile-pic-wrapper">
+                <div class="pic-holder">
+                  <!-- uploaded pic shown here -->
+                  <img id="profilePic" class="pic" src="https://thumbs.dreamstime.com/b/upload-profile-vector-icon-elements-mobile-concept-web-apps-thin-line-icons-website-design-development-app-premium-pack-146390668.jpg">
+              
+                  <label for="newProfilePhoto" class="upload-file-block">
+                    <div class="text-center">
+                      <div class="mb-2">
+                        <i class="fa fa-camera fa-2x"></i>
+                      </div>
+                      <div class="text-uppercase">
+                        Update <br /> Profile Photo
+                      </div>
+                    </div>
+                  </label>
+                  <Input class="uploadProfileInput" type="file" name="profile_pic" id="newProfilePhoto" accept="image/*" style="display: none;" />
                 </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Your new password</label>
-                  <input type="password" name="new_password" class="form-control form-control-sm">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Repeat password</label>
-                  <input type="password" name="repeat_password" class="form-control form-control-sm">
-                </div>
-                <button type="submit" class="btn btn-primary btn-block submit-btn">Confirm</button>
-              </form>
+              
+              </div>
+              <h5 class="my-3">{{current_user.first_name}}</h5>
+             
             </div>
           </div>
+        </div>
+        <div class="col-lg-8">
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Full Name</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{current_user.first_name}} {{current_user.last_name}}</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Email</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{current_user.email}}</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Mobile</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">(+91) {{current_user.phone_number}}</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Username</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{current_user.username}}</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Referral Code</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{current_user.referral_code}}</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+
+                <div class="col-sm-12">
+                  <a href="{% url 'change_account_details' %}"><button type="button" class="btn btn-primary">Edit</button>   </a>             </div>
+              </div>
+            </div>
+          </div>
+         
         </div>
       </div>
-    </main>
-  </div> <!-- row.// -->
-  </div>
-  
+    </div>
+  </section>
   
   </section>
   <!-- ========================= SECTION CONTENT END// ========================= -->
 
 
+<script>
+  $(document).on("change", ".uploadProfileInput", function () {
+  var triggerInput = this;
+  var currentImg = $(this).closest(".pic-holder").find(".pic").attr("src");
+  var holder = $(this).closest(".pic-holder");
+  var wrapper = $(this).closest(".profile-pic-wrapper");
+  $(wrapper).find('[role="alert"]').remove();
+  var files = !!this.files ? this.files : [];
+  if (!files.length || !window.FileReader) {
+    return;
+  }
+  if (/^image/.test(files[0].type)) {
+    // only image file
+    var reader = new FileReader(); // instance of the FileReader
+    reader.readAsDataURL(files[0]); // read the local file
 
+    reader.onloadend = function () {
+      $(holder).addClass("uploadInProgress");
+      $(holder).find(".pic").attr("src", this.result);
+      $(holder).append(
+        '<div class="upload-loader"><div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div></div>'
+      );
+
+      // Dummy timeout; call API or AJAX below
+      setTimeout(() => {
+        $(holder).removeClass("uploadInProgress");
+        $(holder).find(".upload-loader").remove();
+        // If upload successful
+        if (Math.random() < 0.9) {
+          $(wrapper).append(
+            '<div class="snackbar show" role="alert"><i class="fa fa-check-circle text-success"></i> Profile image updated successfully</div>'
+          );
+
+          // Clear input after upload
+          $(triggerInput).val("");
+
+          setTimeout(() => {
+            $(wrapper).find('[role="alert"]').remove();
+          }, 3000);
+        } else {
+          $(holder).find(".pic").attr("src", currentImg);
+          $(wrapper).append(
+            '<div class="snackbar show" role="alert"><i class="fa fa-times-circle text-danger"></i> There is an error while uploading! Please try again later.</div>'
+          );
+
+          // Clear input after upload
+          $(triggerInput).val("");
+          setTimeout(() => {
+            $(wrapper).find('[role="alert"]').remove();
+          }, 3000);
+        }
+      }, 1500);
+    };
+  } else {
+    $(wrapper).append(
+      '<div class="alert alert-danger d-inline-block p-2 small" role="alert">Please choose the valid image.</div>'
+    );
+    setTimeout(() => {
+      $(wrapper).find('role="alert"').remove();
+    }, 3000);
+  }
+});
+
+</script>
 
 {% endblock %}
 

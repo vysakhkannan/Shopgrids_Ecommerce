@@ -152,6 +152,15 @@ def register(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
 
+            if Accounts.objects.filter(phone_number = phone_number).exists():
+                messages.info(request,'Phone Number Exists')
+                return redirect('register')
+
+            if Accounts.objects.filter(email = email).exists():
+                messages.info(request,'Email ID Already Taken')
+                return redirect('register')
+
+
             referral_code = str(uuid.uuid4())[0:8]
             user = Accounts.objects.create_user(first_name = first_name, last_name = last_name, username = username, email = email, password = password)
             user.referral_code = referral_code
@@ -183,7 +192,7 @@ def register(request):
             return redirect('register')
 
         else:
-            messages.info(request,'Registration Not Successful')
+            messages.info(request,'Registration Not Successfuhgjl')
             return redirect('register')
 
 
@@ -209,7 +218,16 @@ def logout(request):
 def otp_login(request):
     if request.method == 'POST':
         phone_number = request.POST.get('phone_number')
-        user = Accounts.objects.get(phone_number= phone_number)
+
+        try:
+
+            Accounts.objects.get(phone_number= phone_number)
+
+        except:
+
+            messages.info(request,"Enter Valid Phone Number")
+            return redirect('otp_login')
+
 
         request.session['phone_number'] = phone_number
 
@@ -363,19 +381,11 @@ def verify_otp(request):
 def my_account(request):
     
     user    = request.user.id
-
     current_user  = Accounts.objects.get(id = user)
-
     orders = Order.objects.filter(user = current_user).order_by('-id')
-
     sub_orders = OrderItems.objects.all()
-
     products = Products.objects.all()
-
     user_addresses = UserAddress.objects.filter(user = current_user)
-
-
-    
 
     context = {
         'current_user' : current_user,
@@ -384,18 +394,14 @@ def my_account(request):
         'products' : products,
         'user_addresses' : user_addresses
 
-
     }
-    return render(request, 'user/my_account_details.html', context)
+    return render(request, 'user/my_account.html', context)
 
 
 
 def my_account_orders(request):
     user    = request.user.id
     orders  = Order.objects.filter(user_id = user)
-    for orr in orders:
-
-        print(orr.order_id)
 
     context = {
         'orders' : orders
@@ -415,33 +421,56 @@ def change_account_details(request):
         last_name = request.POST['last_name']
         phone_number = request.POST['phone_number']
         email = request.POST['email']
-        username = request.POST['username']
+        username = request.POST.get('username')
+        
         if first_name is not None:
             current_user.first_name = first_name
         
         if last_name is not None:
             current_user.last_name = last_name
 
-        if phone_number is not None:
-            current_user.phone_number = phone_number
 
-        if Accounts.objects.filter(username = username).exists():
+        if Accounts.objects.filter(username = username).exclude(username=current_user.username).exists():
             messages.info(request,'Username Exist')
-            return redirect('my_account')  
-         
+            return redirect('change_account_details')  
 
-        if email is not None:
+        else:
+
+            current_user.username = username
+
+        if Accounts.objects.filter(email = email).exclude(email=current_user.email).exists():
+            messages.info(request,'Email Exist')
+            return redirect('change_account_details')
+
+        else:
+
             current_user.email = email
 
-        if phone_number is not None:
+        if Accounts.objects.filter(phone_number = phone_number).exclude(phone_number=current_user.phone_number).exists():
+            messages.info(request,'Phone Number Exist')
+            return redirect('change_account_details')
+
+        else:
+
             current_user.phone_number = phone_number
 
         current_user.save()
 
         messages.success(request,'Details Changed')
         return redirect('my_account')
+
     else:
-        return redirect('my_account')
+
+        id = request.user.id
+        current_user = Accounts.objects.get(id = id)
+
+        context = {
+
+            'current_user': current_user
+
+        }
+
+        return render(request,'user/edit_user_details.html', context)
 
 # change password
 
@@ -459,13 +488,16 @@ def change_password(request):
                 current_user.save()
                 update_session_auth_hash(request,current_user)
                 messages.info(request,'Password Successfully Changed')
-                return redirect('my_account')
+                return redirect('change_password')
             else:
                 messages.info(request,'Old Password incorrect')
-                return redirect('my_account')
+                return redirect('change_password')
         else:
             messages.info(request,'Password Mismatch')
-            return redirect('my_account')
+            return redirect('change_password')
+    else:
+
+        return render(request, 'user/change_password.html')
 
 
 # my orders
@@ -540,7 +572,11 @@ def my_account_address_edit(request, id):
         
 
         if email is not None:
-            current_user_address.email = email
+            if UserAddress.objects.filter(email = email).exists():
+                messages.info(request,"Email id exists")
+                return redirect('my_account_address_edit')
+
+
         
         if address is not None:
             current_user_address.address = address

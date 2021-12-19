@@ -82,6 +82,8 @@ TEMPLATES = [
                 'order_management.context_processor.coupon_expiry',
                 'cart.context_processor.wishlist_counter',
                 'cart.context_processor.saved_amount',
+                'cart.context_processor.guest_counter',
+
 
 
             ],

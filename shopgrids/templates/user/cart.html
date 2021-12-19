@@ -175,7 +175,7 @@
                     <li class="last">Total <span id="total_diplay_id">₹ <span id="cart_total">{{cart_sub_total}}</span></span></li>
                   </ul>
                   <div class="button">
-                    <a type="button" href="{% url 'checkout' %}" onclick="return checkCartEmpty('{{cart_sub_total}}')" class="btn" id="cart_check">Checkout</a>
+                    <a type="button" href="{% url 'checkout' -1 0 %}" onclick="return checkCartEmpty('{{cart_sub_total}}')" class="btn" id="cart_check">Checkout</a>
                     <a href="{% url 'home' %}" class="btn btn-alt"
                       >Continue shopping</a
                     >
