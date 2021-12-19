@@ -1,0 +1,96 @@
+{% extends 'user/base.html' %}
+
+{% block content %}
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<section class="section-conten padding-y bg">
+
+    <div id = "ordered_items" class="container mt-5 mb-5">
+      <div class="row d-flex justify-content-center">
+      <main class="col-md-10">
+          <div class="card mb-4">
+              <div class="card-header py-3">
+                <h5 class="mb-0">Edit Profile Details</h5>
+              </div>
+              <div class="mt-4">
+                  {% include 'includes/alert.html' %}
+              </div>
+              <div class="card-body">
+                <form action = "{% url 'change_account_details' %}" method = "POST" id="edit_user_details_form_id">
+                  {% csrf_token %}
+                <!-- 2 column grid layout with text inputs for the first and last names -->
+                <div class="row mb-4">
+                  <div class="col">
+                    <div class="form-outline">
+
+                        <label class="form-label" for="form7Example1">First name</label>
+                        <input type="text" id="first_name_id" class="form-control" name="first_name" value="{{current_user.first_name}}" onkeypress="return isText(event)" />
+                        <span class="error_form" id="first_name_error_message"></span>
+
+
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-outline">
+                        <label class="form-label" for="form7Example2">Last name</label>
+                        <input type="text" id="last_name_id" class="form-control" name="last_name" value="{{current_user.last_name}}"/>
+                        <span class="error_form" id="last_name_error_message"></span>
+
+                    </div>
+                  </div>
+                </div>
+      
+                <!-- Text input -->
+                <div class="form-outline mb-4">
+                    <label class="form-label" for="form7Example3">Email</label>
+
+                        <input type="email" id="user_email_id" class="form-control" name="email" value="{{current_user.email}}"/>
+                        <span class="error_form" id="user_email_error_message"></span>
+
+
+
+                </div>
+                <!-- Text input -->
+                <div class="form-outline mb-4">
+                    <label class="form-label" for="form7Example3">username</label>
+                    <input type="text" id="username_id" class="form-control" name="username" value="{{current_user.username}}"/>
+                    <span class="error_form" id="username_error_message"></span>
+
+                  </div>
+      
+                <!-- Text input -->
+                <div class="form-outline mb-4">
+                    <label class="form-label" for="form7Example4">Phone Number</label>
+                    <input type="text" id="phone_number_id" class="form-control" name="phone_number" value="{{current_user.phone_number}}" onkeypress="return isNumber(event)" onpaste="return false;"
+                  oninput="javascript: if(this.value > this.maxLength) this.value = this.value.slice(0, this.maxLength)" maxlength="10"/>
+                    <span class="error_form" id="phone_error_message"></span>
+
+                </div>
+      
+                <hr>
+                <!-- Checkbox -->
+                <div class="form-check d-flex justify-content-center mb-2">
+                    <a href="{% url 'my_account' %}"> <button type="button" class="btn btn-primary">Cancel</button></a>
+                    &nbsp; 
+                    &nbsp; 
+
+                    <button type="submit" class="btn btn-primary">Change</button>
+
+
+  
+                </div>
+              </form>
+
+              </div>
+            </div>
+  
+      </main>
+    </div> <!-- row.// -->
+    </div>
+    
+    
+    </section>
+
+{% endblock %}
