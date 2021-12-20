@@ -150,8 +150,6 @@ def adminlogin(request):
                 category_name = 0
                 category_dict[category_name] = sale_price
                 category_price[sale_price] = category_name
-		average_sales = 0
-		order_item_count = 0
     
   
         context = {
