@@ -55,7 +55,7 @@ Used Nginx as a proxy server and also as a load balancer.
 ## Link
 [Shopgrids](https://shopgrids.vysakh811.tech/)
 
-##Screenshort
+## Screenshort
 ![Screenshot from 2022-02-18 16-16-31](https://user-images.githubusercontent.com/91023534/154668335-38a8acb7-cb45-4813-8560-e05542927356.png)
 
 
